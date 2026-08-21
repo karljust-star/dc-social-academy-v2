@@ -21,9 +21,9 @@
                 <p class="text-[10px] text-gray-400 tracking-widest uppercase">SOCIAL ACADEMY</p>
             </div>
             <nav class="space-y-2">
-                <a href="#" class="block px-4 py-2.5 rounded bg-amber-500 text-gray-900 font-bold text-sm">Admin Panel</a>
-                <a href="#" class="block px-4 py-2.5 rounded text-gray-400 hover:text-white hover:bg-gray-800 text-sm font-medium">CODE</a>
-                <a href="#" class="block px-4 py-2.5 rounded text-gray-400 hover:text-white hover:bg-gray-800 text-sm font-medium">Listahan ng Estudyante</a>
+                <button onclick="switchTab('adminPanel')" id="navAdminPanel" class="w-full text-left px-4 py-2.5 rounded bg-amber-500 text-gray-900 font-bold text-sm transition">Admin Panel</button>
+                <button onclick="switchTab('codeSection')" id="navCode" class="w-full text-left px-4 py-2.5 rounded text-gray-400 hover:text-white hover:bg-gray-800 text-sm font-medium transition">CODE</button>
+                <button onclick="switchTab('studentsSection')" id="navStudents" class="w-full text-left px-4 py-2.5 rounded text-gray-400 hover:text-white hover:bg-gray-800 text-sm font-medium transition">Listahan ng Estudyante</button>
             </nav>
         </div>
         <div>
@@ -35,35 +35,37 @@
     <div class="flex-1 p-6 md:p-10">
         <!-- TOP HEADER -->
         <div class="flex justify-between items-center mb-8 bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
-            <h2 class="text-xl font-bold text-gray-800">Admin Control Center</h2>
+            <h2 id="headerTitle" class="text-xl font-bold text-gray-800">Admin Control Center</h2>
             <div class="bg-amber-100 text-amber-800 text-xs font-bold px-4 py-2 rounded-full border border-amber-300">
                 Administrator
             </div>
         </div>
 
-        <!-- GENERATE CODE SECTION -->
-        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm mb-8">
-            <h3 class="text-sm font-bold text-gray-800 mb-4">Mag-generate ng Bagong Code & PIN</h3>
-            
-            <form id="codeForm" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <div>
-                    <label class="block text-gray-500 text-xs mb-1">Access Code</label>
-                    <input type="text" id="accessCodeInput" required placeholder="Halimbawa: DCSOCIAL123" class="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:border-amber-500 bg-white">
-                </div>
-                <div>
-                    <label class="block text-gray-500 text-xs mb-1">PIN</label>
-                    <input type="text" id="pinInput" required placeholder="Halimbawa: 12345" class="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:border-amber-500 bg-white">
-                </div>
-            </form>
+        <!-- TAB 1: ADMIN PANEL (Generator) -->
+        <div id="tabAdminPanel" class="space-y-8">
+            <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                <h3 class="text-sm font-bold text-gray-800 mb-4">Mag-generate ng Bagong Code & PIN</h3>
+                
+                <form id="codeForm" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="block text-gray-500 text-xs mb-1">Access Code</label>
+                        <input type="text" id="accessCodeInput" required placeholder="Halimbawa: DCSOCIAL123" class="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:border-amber-500 bg-white">
+                    </div>
+                    <div>
+                        <label class="block text-gray-500 text-xs mb-1">PIN</label>
+                        <input type="text" id="pinInput" required placeholder="Halimbawa: 12345" class="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:border-amber-500 bg-white">
+                    </div>
+                </form>
 
-            <button type="button" id="saveCodeBtn" class="bg-gold text-gray-900 font-bold px-6 py-2.5 rounded text-xs tracking-wider transition uppercase shadow-sm">
-                I-save ang Code at PIN
-            </button>
-            <p id="saveStatus" class="mt-2 text-xs font-semibold"></p>
+                <button type="button" id="saveCodeBtn" class="bg-gold text-white font-bold px-6 py-2.5 rounded text-xs tracking-wider transition uppercase shadow-sm">
+                    I-save ang Code at PIN
+                </button>
+                <p id="saveStatus" class="mt-2 text-xs font-semibold"></p>
+            </div>
         </div>
 
-        <!-- LISTAHAN NG ACCESS CODES SECTION -->
-        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+        <!-- TAB 2: CODE LIST SECTION -->
+        <div id="tabCodeSection" class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm hidden">
             <h3 class="text-sm font-bold text-gray-800 mb-4">Listahan ng mga Access Codes (Generated)</h3>
             
             <div class="overflow-x-auto">
@@ -77,18 +79,48 @@
                     </thead>
                     <tbody id="codesTableBody">
                         <tr>
-                            <td colspan="3" class="py-4 text-center text-xs text-gray-400 italic">Wala pang na-generate na Code.</td>
+                            <td colspan="3" class="py-4 text-center text-xs text-gray-400 italic">Naglo-load ng mga codes...</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
+
+        <!-- TAB 3: STUDENTS LIST SECTION -->
+        <div id="tabStudentsSection" class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm hidden">
+            <div class="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
+                <h3 class="text-sm font-bold text-gray-800">Listahan ng mga Rehistradong Estudyante</h3>
+                <div class="w-full sm:w-72">
+                    <input type="text" id="searchStudentInput" placeholder="Mag-search ng pangalan o username..." class="w-full px-3 py-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-amber-500 bg-white">
+                </div>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-gray-200 text-xs text-gray-500">
+                            <th class="py-2 px-3 font-semibold">Name</th>
+                            <th class="py-2 px-3 font-semibold">CP Number</th>
+                            <th class="py-2 px-3 font-semibold">Username</th>
+                            <th class="py-2 px-3 font-semibold">Password</th>
+                            <th class="py-2 px-3 font-semibold text-center">Aksyon (Block)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentsTableBody">
+                        <tr>
+                            <td colspan="5" class="py-4 text-center text-xs text-gray-400 italic">Naglo-load ng mga estudyante...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
     </div>
 
-    <!-- Firebase Script para sa Code Generation -->
+    <!-- FIREBASE SCRIPT & LOGIC -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDMVxPTMiA1VTPnam91L9onX0G3DvBLoik",
@@ -102,6 +134,45 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        // Tab Switching Logic
+        window.switchTab = function(tabName) {
+            const tabAdminPanel = document.getElementById('tabAdminPanel');
+            const tabCodeSection = document.getElementById('tabCodeSection');
+            const tabStudentsSection = document.getElementById('tabStudentsSection');
+            
+            const navAdminPanel = document.getElementById('navAdminPanel');
+            const navCode = document.getElementById('navCode');
+            const navStudents = document.getElementById('navStudents');
+            const headerTitle = document.getElementById('headerTitle');
+
+            // I-hide lahat
+            tabAdminPanel.classList.add('hidden');
+            tabCodeSection.classList.add('hidden');
+            tabStudentsSection.classList.add('hidden');
+
+            // Reset navigation styles
+            [navAdminPanel, navCode, navStudents].forEach(nav => {
+                nav.className = "w-full text-left px-4 py-2.5 rounded text-gray-400 hover:text-white hover:bg-gray-800 text-sm font-medium transition";
+            });
+
+            if(tabName === 'adminPanel') {
+                tabAdminPanel.classList.remove('hidden');
+                navAdminPanel.className = "w-full text-left px-4 py-2.5 rounded bg-amber-500 text-gray-900 font-bold text-sm transition";
+                headerTitle.textContent = "Admin Control Center";
+            } else if(tabName === 'codeSection') {
+                tabCodeSection.classList.remove('hidden');
+                navCode.className = "w-full text-left px-4 py-2.5 rounded bg-amber-500 text-gray-900 font-bold text-sm transition";
+                headerTitle.textContent = "Access Codes Management";
+                loadCodes();
+            } else if(tabName === 'studentsSection') {
+                tabStudentsSection.classList.remove('hidden');
+                navStudents.className = "w-full text-left px-4 py-2.5 rounded bg-amber-500 text-gray-900 font-bold text-sm transition";
+                headerTitle.textContent = "Listahan ng mga Estudyante";
+                loadStudents();
+            }
+        }
+
+        // Code Generation & Saving
         const saveBtn = document.getElementById('saveCodeBtn');
         const saveStatus = document.getElementById('saveStatus');
         const codesTableBody = document.getElementById('codesTableBody');
@@ -166,7 +237,81 @@
             }
         });
 
-        loadCodes();
+        // Students List & Search & Blocking Logic
+        let allStudents = [];
+        const studentsTableBody = document.getElementById('studentsTableBody');
+        const searchStudentInput = document.getElementById('searchStudentInput');
+
+        async function loadStudents() {
+            try {
+                const querySnapshot = await getDocs(collection(db, "users"));
+                allStudents = [];
+                
+                querySnapshot.forEach((docItem) => {
+                    allStudents.push({ id: docItem.id, ...docItem.data() });
+                });
+
+                renderStudents(allStudents);
+            } catch (error) {
+                console.error("Error loading students:", error);
+                studentsTableBody.innerHTML = `<tr><td colspan="5" class="py-4 text-center text-xs text-red-500">Error sa pagkolekta ng data ng estudyante.</td></tr>`;
+            }
+        }
+
+        function renderStudents(students) {
+            studentsTableBody.innerHTML = "";
+
+            if(students.length === 0) {
+                studentsTableBody.innerHTML = `<tr><td colspan="5" class="py-4 text-center text-xs text-gray-400 italic">Walang nahanap na estudyante.</td></tr>`;
+                return;
+            }
+
+            students.forEach((student) => {
+                const isBlocked = student.isBlocked === true;
+                const blockBtnText = isBlocked ? "Unblock" : "Block";
+                const blockBtnClass = isBlocked ? "bg-green-600 hover:bg-green-700 text-white" : "bg-red-600 hover:bg-red-700 text-white";
+                
+                const row = `
+                    <tr class="border-b border-gray-100 text-xs text-gray-700">
+                        <td class="py-3 px-3 font-semibold">${student.name || student.fullname || 'N/A'}</td>
+                        <td class="py-3 px-3">${student.cpNumber || student.phone || 'N/A'}</td>
+                        <td class="py-3 px-3 font-mono">${student.username || 'N/A'}</td>
+                        <td class="py-3 px-3 font-mono">${student.password || student.pin || 'N/A'}</td>
+                        <td class="py-3 px-3 text-center">
+                            <button onclick="toggleBlockStudent('${student.id}', ${isBlocked})" class="px-3 py-1 rounded text-[11px] font-bold transition ${blockBtnClass}">
+                                ${blockBtnText}
+                            </button>
+                        </td>
+                    </tr>
+                `;
+                studentsTableBody.innerHTML += row;
+            });
+        }
+
+        // Search feature
+        searchStudentInput.addEventListener('input', (e) => {
+            const keyword = e.target.value.toLowerCase().trim();
+            const filtered = allStudents.filter(s => {
+                const name = (s.name || s.fullname || '').toLowerCase();
+                const username = (s.username || '').toLowerCase();
+                return name.includes(keyword) || username.includes(keyword);
+            });
+            renderStudents(filtered);
+        });
+
+        // Block / Unblock function
+        window.toggleBlockStudent = async function(studentId, currentStatus) {
+            try {
+                const studentRef = doc(db, "users", studentId);
+                await updateDoc(studentRef, {
+                    isBlocked: !currentStatus
+                });
+                loadStudents(); // i-refresh ang listahan
+            } catch (error) {
+                console.error("Error updating block status:", error);
+                alert("Hindi na-update ang status ng estudyante.");
+            }
+        }
     </script>
 </body>
 </html>
