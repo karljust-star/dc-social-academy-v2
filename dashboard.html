@@ -13,81 +13,280 @@
         }
 
         body {
-            background-color: #f4f6f9;
+            background-color: #f8f9fa;
             color: #333;
             display: flex;
-            flex-direction: column;
             min-height: 100vh;
         }
 
-        header {
-            background-color: #ffffff;
-            padding: 20px 40px;
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: #111418;
+            color: #ffffff;
             display: flex;
+            flex-direction: column;
             justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #e5e7eb;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            padding: 30px 20px;
+            position: fixed;
+            height: 100vh;
         }
 
-        .brand-title {
+        .sidebar-brand {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .sidebar-brand h2 {
             font-size: 18px;
+            color: #e5be01;
             font-weight: 800;
-            color: #111418;
-            letter-spacing: 0.5px;
         }
 
-        .btn-logout {
-            background-color: #fee2e2;
-            color: #991b1b;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-weight: 700;
-            font-size: 13px;
-            cursor: pointer;
+        .sidebar-menu {
+            list-style: none;
+            flex-grow: 1;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 8px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            color: #9ca3af;
             text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.2s;
+        }
+
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background-color: #e5be01;
+            color: #111418;
+        }
+
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            background-color: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 700;
+            border-radius: 10px;
             transition: background 0.2s;
         }
 
-        .btn-logout:hover {
-            background-color: #fecaca;
+        .logout-btn:hover {
+            background-color: rgba(239, 68, 68, 0.2);
         }
 
-        .main-content {
-            flex: 1;
-            padding: 40px 20px;
-            max-width: 900px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
-        .welcome-card {
-            background: #ffffff;
-            padding: 30px;
+        /* Partner Badge */
+        .partner-badge {
+            background: linear-gradient(135deg, #22272e 0%, #1a1f26 100%);
+            border: 1px solid #e5be01;
+            padding: 15px;
             border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            border: 1px solid #e5e7eb;
+            text-align: center;
             margin-bottom: 20px;
         }
 
-        .welcome-card h2 {
-            font-size: 22px;
+        .partner-badge p {
+            font-size: 11px;
+            color: #e5be01;
+            font-weight: 800;
+            margin-top: 5px;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 260px;
+            flex-grow: 1;
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        .top-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .top-header h1 {
+            font-size: 24px;
             color: #111418;
-            margin-bottom: 10px;
             font-weight: 800;
         }
 
-        .welcome-card p {
-            color: #6b7280;
+        .top-header p {
             font-size: 14px;
+            color: #6b7280;
+            margin-top: 3px;
         }
 
-        @media (max-width: 600px) {
-            header {
-                padding: 15px 20px;
+        /* Profile & Avatar */
+        .user-profile-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #ffffff;
+            padding: 8px 16px;
+            border-radius: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            border: 1px solid #eef0f2;
+        }
+
+        .avatar-container {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid #e5be01;
+        }
+
+        .avatar-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar-container input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        /* Sections */
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active-section {
+            display: block;
+        }
+
+        /* Course Cards */
+        .course-card {
+            background: #ffffff;
+            padding: 20px 24px;
+            border-radius: 14px;
+            border: 1px solid #eef0f2;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.2s;
+        }
+
+        .course-card:hover {
+            transform: translateY(-2px);
+            border-color: #e5be01;
+        }
+
+        .course-info h3 {
+            font-size: 15px;
+            color: #111418;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .course-info p {
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .arrow-icon {
+            font-size: 18px;
+            color: #9ca3af;
+            font-weight: bold;
+        }
+
+        /* Settings Card */
+        .settings-card {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 14px;
+            border: 1px solid #eef0f2;
+            max-width: 600px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+        }
+
+        .settings-card h3 {
+            font-size: 18px;
+            font-weight: 800;
+            color: #111418;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            color: #374151;
+            margin-bottom: 5px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: #e5be01;
+            box-shadow: 0 0 0 3px rgba(229, 190, 1, 0.15);
+        }
+
+        .btn-save {
+            background: #e5be01;
+            color: #111418;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .btn-save:hover {
+            background: #d4ae01;
+        }
+
+        /* Mobile View */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
             }
-            .welcome-card {
+            body {
+                flex-direction: column;
+            }
+            .main-content {
+                margin-left: 0;
                 padding: 20px;
             }
         }
@@ -95,17 +294,156 @@
 </head>
 <body>
 
-    <header>
-        <div class="brand-title">DC SOCIAL ACADEMY</div>
-        <a href="index.html" class="btn-logout">Log Out</a>
-    </header>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div>
+            <div class="sidebar-brand">
+                <h2>DC SOCIAL ACADEMY</h2>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="#" class="active" onclick="switchTab('home-section', this)">🏠 Home</a></li>
+                <li><a href="#" onclick="switchTab('settings-section', this)">⚙️ Settings</a></li>
+            </ul>
+        </div>
 
-    <div class="main-content">
-        <div class="welcome-card">
-            <h2>Welcome to your Dashboard!</h2>
-            <p>Maligayang pagdating sa DC Social Academy. Dito makikita ang iyong mga aralin at updates.</p>
+        <div>
+            <div class="partner-badge">
+                <span style="font-size: 18px;">👑</span>
+                <p>YOU'RE AN ACADEMY PARTNER</p>
+            </div>
+            <a href="index.html" class="logout-btn">🚪 Logout</a>
         </div>
     </div>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+        
+        <!-- Top Header with Profile Picture Upload -->
+        <div class="top-header">
+            <div>
+                <h1>Welcome back! 👋</h1>
+                <p>Continue your learning journey.</p>
+            </div>
+            <div class="user-profile-area">
+                <span id="userNameDisplay" style="font-size: 13.5px; font-weight: 700;">Student</span>
+                <div class="avatar-container" title="Click to change profile picture">
+                    <img id="profileAvatar" src="https://via.placeholder.com/150" alt="Profile">
+                    <input type="file" id="avatarUpload" accept="image/*">
+                </div>
+            </div>
+        </div>
+
+        <!-- HOME SECTION -->
+        <div id="home-section" class="content-section active-section">
+            <div class="course-card">
+                <div class="course-info">
+                    <h3>📢 HOW TO CREATE ADS</h3>
+                    <p>Learn how to create effective advertisements.</p>
+                </div>
+                <div class="arrow-icon">›</div>
+            </div>
+
+            <div class="course-card">
+                <div class="course-info">
+                    <h3>💼 HOW TO CREATE PORTFOLIO</h3>
+                    <p>Learn how to create your professional portfolio.</p>
+                </div>
+                <div class="arrow-icon">›</div>
+            </div>
+
+            <div class="course-card">
+                <div class="course-info">
+                    <h3>🖼️ HOW TO CREATE AI PHOTO</h3>
+                    <p>Learn how to create high-quality AI photos.</p>
+                </div>
+                <div class="arrow-icon">›</div>
+            </div>
+
+            <div class="course-card">
+                <div class="course-info">
+                    <h3>🎬 HOW TO TURN YOUR VIDEO INTO AI VIDEO</h3>
+                    <p>Learn how to transform your videos using AI.</p>
+                </div>
+                <div class="arrow-icon">›</div>
+            </div>
+
+            <div class="course-card">
+                <div class="course-info">
+                    <h3>✍️ ALL ABOUT CONTENT CREATION</h3>
+                    <p>Learn how to create engaging content that attracts your brand, builds your brand, and grows your audience.</p>
+                </div>
+                <div class="arrow-icon">›</div>
+            </div>
+        </div>
+
+        <!-- SETTINGS SECTION -->
+        <div id="settings-section" class="content-section">
+            <div class="settings-card">
+                <h3>Account Settings</h3>
+                <form id="settingsForm">
+                    <div class="form-group">
+                        <label>First Name</label>
+                        <input type="text" id="settingFirstName" placeholder="First Name">
+                    </div>
+                    <div class="form-group">
+                        <label>Last Name</label>
+                        <input type="text" id="settingLastName" placeholder="Last Name">
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="settingEmail" placeholder="Email">
+                    </div>
+                    <div class="form-group">
+                        <label>New Password</label>
+                        <input type="password" id="settingPassword" placeholder="Leave blank to keep current password">
+                    </div>
+                    <button type="submit" class="btn-save">Save Changes</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function switchTab(sectionId, element) {
+            document.querySelectorAll('.content-section').forEach(sec => {
+                sec.classList.remove('active-section');
+            });
+            document.querySelectorAll('.sidebar-menu a').forEach(link => {
+                link.classList.remove('active');
+            });
+
+            document.getElementById(sectionId).classList.add('active-section');
+            element.classList.add('active');
+        }
+
+        const avatarInput = document.getElementById('avatarUpload');
+        const profileAvatar = document.getElementById('profileAvatar');
+
+        const savedAvatar = localStorage.getItem('dc_user_avatar');
+        if (savedAvatar) {
+            profileAvatar.src = savedAvatar;
+        }
+
+        avatarInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const base64String = event.target.result;
+                    profileAvatar.src = base64String;
+                    localStorage.setItem('dc_user_avatar', base64String);
+                    alert("Profile picture updated successfully!");
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        document.getElementById('settingsForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert("Settings updated successfully!");
+        });
+    </script>
 
 </body>
 </html>
