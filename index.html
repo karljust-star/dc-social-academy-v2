@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - DC Social Academy</title>
+    <title>DC Social Academy - Login</title>
     <style>
         * {
             box-sizing: border-box;
@@ -22,63 +22,137 @@
             padding: 20px;
         }
 
-        .login-container {
+        .login-wrapper {
             background: #ffffff;
-            padding: 40px;
-            border-radius: 16px;
             width: 100%;
-            max-width: 420px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
-            border: 1px solid #e5e7eb;
+            max-width: 950px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+            display: flex;
+            overflow: hidden;
+            border: 1px solid #eef0f2;
         }
 
-        .brand-header {
+        /* Left Side: Welcome Banner */
+        .welcome-side {
+            flex: 1;
+            background: #ffffff;
+            padding: 50px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border-right: 1px solid #f1f3f5;
+        }
+
+        .welcome-side h1.brand-title {
+            font-size: 36px;
+            color: #d4ae01;
+            font-weight: 900;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .welcome-side h2 {
+            font-size: 28px;
+            color: #111418;
+            font-weight: 800;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+
+        .welcome-side p {
+            font-size: 14px;
+            color: #6b7280;
+            line-height: 1.5;
+            margin-bottom: 30px;
+        }
+
+        .feature-box {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+        }
+
+        .feature-box h4 {
+            font-size: 14px;
+            color: #111418;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .feature-box p {
+            font-size: 12.5px;
+            color: #6b7280;
+            margin: 0;
+        }
+
+        /* Right Side: Login Form */
+        .form-side {
+            flex: 1;
+            padding: 50px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: #ffffff;
+        }
+
+        .form-header {
             text-align: center;
             margin-bottom: 30px;
         }
 
-        .brand-header h1 {
-            font-size: 24px;
+        .user-icon {
+            width: 50px;
+            height: 50px;
+            background: #f3f4f6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            color: #4b5563;
+            font-size: 20px;
+        }
+
+        .form-header h3 {
+            font-size: 22px;
             color: #111418;
             font-weight: 800;
-            letter-spacing: 0.5px;
+            margin-bottom: 6px;
         }
 
-        .brand-header p {
-            font-size: 11px;
+        .form-header p {
+            font-size: 13px;
             color: #6b7280;
-            letter-spacing: 2px;
-            margin-top: 5px;
-            font-weight: 700;
         }
 
-        .form-group {
+        .input-group {
             margin-bottom: 18px;
         }
 
-        .form-group label {
+        .input-group label {
             display: block;
-            font-size: 11.5px;
+            font-size: 12px;
+            font-weight: 700;
             color: #374151;
             margin-bottom: 6px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
         }
 
-        .form-group input {
+        .input-group input {
             width: 100%;
             padding: 12px 14px;
             background: #f9fafb;
             border: 1px solid #d1d5db;
             border-radius: 8px;
-            color: #111418;
             font-size: 14px;
+            color: #111418;
             outline: none;
-            transition: all 0.2s ease;
+            transition: all 0.2s;
         }
 
-        .form-group input:focus {
+        .input-group input:focus {
             background: #fff;
             border-color: #e5be01;
             box-shadow: 0 0 0 3px rgba(229, 190, 1, 0.15);
@@ -94,62 +168,116 @@
             font-weight: 800;
             font-size: 14px;
             cursor: pointer;
+            transition: background 0.2s;
             margin-top: 10px;
-            transition: all 0.2s ease;
             box-shadow: 0 4px 12px rgba(229, 190, 1, 0.25);
         }
 
         .btn-login:hover {
             background-color: #d4ae01;
-            transform: translateY(-1px);
         }
 
-        .register-link {
+        .create-account-link {
             text-align: center;
             margin-top: 24px;
             font-size: 13.5px;
             color: #6b7280;
         }
 
-        .register-link a {
+        .create-account-link a {
             color: #111418;
             text-decoration: none;
             font-weight: 700;
-            transition: color 0.2s;
         }
 
-        .register-link a:hover {
+        .create-account-link a:hover {
             color: #e5be01;
             text-decoration: underline;
+        }
+
+        /* Mobile Responsiveness (CP View) */
+        @media (max-width: 768px) {
+            .login-wrapper {
+                flex-direction: column;
+                max-width: 450px;
+            }
+            .welcome-side {
+                padding: 30px 20px;
+                border-right: none;
+                border-bottom: 1px solid #f1f3f5;
+            }
+            .form-side {
+                padding: 30px 20px;
+            }
+            .welcome-side h1.brand-title {
+                font-size: 28px;
+            }
+            .welcome-side h2 {
+                font-size: 22px;
+            }
         }
     </style>
 </head>
 <body>
 
-    <div class="login-container">
-        <div class="brand-header">
-            <h1>DC SOCIAL ACADEMY</h1>
-            <p>MEMBER LOGIN PORTAL</p>
+    <div class="login-wrapper">
+        <!-- Left Welcome Section -->
+        <div class="welcome-side">
+            <h1 class="brand-title">DC</h1>
+            <h2>Welcome to<br>DC SOCIAL ACADEMY</h2>
+            <p>Your all-in-one platform to learn, grow, and master digital marketing and online success.</p>
+            
+            <div class="feature-box">
+                <h4>🎓 Step-by-step Tutorials</h4>
+                <p>Easy to follow training designed for beginners and pros.</p>
+            </div>
+            <div class="feature-box">
+                <h4>🚀 Practical Strategies</h4>
+                <p>Real-world applications to scale your digital career.</p>
+            </div>
         </div>
 
-        <form id="loginForm">
-            <div class="form-group">
-                <label>Username</label>
-                <input type="text" id="loginUsername" placeholder="Enter your username" required>
+        <!-- Right Login Form Section -->
+        <div class="form-side">
+            <div class="form-header">
+                <div class="user-icon">👤</div>
+                <h3>Login to your account</h3>
+                <p>Enter your credentials to access your learning dashboard.</p>
             </div>
 
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" id="loginPassword" placeholder="Enter your password" required>
+            <form id="loginForm">
+                <div class="input-group">
+                    <label>Username</label>
+                    <input type="text" id="loginUsername" placeholder="Enter your username" required>
+                </div>
+
+                <div class="input-group">
+                    <label>Password / PIN</label>
+                    <input type="password" id="loginPassword" placeholder="Enter your password or PIN" required>
+                </div>
+
+                <button type="submit" class="btn-login">LOGIN</button>
+            </form>
+
+            <div class="create-account-link">
+                Don't have an account? <a href="register.html">Create account</a>
             </div>
-
-            <button type="submit" class="btn-login">Log In</button>
-        </form>
-
-        <div class="register-link">
-            Don't have an account? <a href="register.html">Create Account</a>
         </div>
     </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const user = document.getElementById('loginUsername').value;
+            
+            // Dito natin iche-check sa database mamaya kung admin o student
+            if(user === 'admin') {
+                window.location.href = 'admin-dashboard.html';
+            } else {
+                window.location.href = 'dashboard.html';
+            }
+        });
+    </script>
 
 </body>
 </html>

@@ -19,35 +19,35 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 40px 20px;
+            padding: 20px;
         }
 
-        .register-container {
+        .register-wrapper {
             background: #ffffff;
-            padding: 45px 40px;
-            border-radius: 16px;
             width: 100%;
-            max-width: 520px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
-            border: 1px solid #e5e7eb;
+            max-width: 600px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+            padding: 40px;
+            border: 1px solid #eef0f2;
         }
 
-        .brand-header {
+        .form-header {
             text-align: center;
             margin-bottom: 30px;
         }
 
-        .brand-header h1 {
+        .form-header h1 {
             font-size: 26px;
             color: #111418;
             font-weight: 800;
             letter-spacing: 0.5px;
         }
 
-        .brand-header p {
-            font-size: 11px;
+        .form-header p {
+            font-size: 11.5px;
             color: #6b7280;
-            letter-spacing: 2.5px;
+            letter-spacing: 2px;
             margin-top: 6px;
             font-weight: 700;
         }
@@ -72,8 +72,6 @@
             color: #374151;
             margin-bottom: 6px;
             font-weight: 700;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
         }
 
         .form-group input {
@@ -82,10 +80,10 @@
             background: #f9fafb;
             border: 1px solid #d1d5db;
             border-radius: 8px;
-            color: #111418;
             font-size: 14px;
+            color: #111418;
             outline: none;
-            transition: all 0.2s ease;
+            transition: all 0.2s;
         }
 
         .form-group input:focus {
@@ -99,19 +97,18 @@
             background-color: #e5be01;
             color: #111418;
             border: none;
-            padding: 14px;
+            padding: 13px;
             border-radius: 8px;
             font-weight: 800;
-            font-size: 14.5px;
+            font-size: 14px;
             cursor: pointer;
+            transition: background 0.2s;
             margin-top: 10px;
-            transition: all 0.2s ease;
             box-shadow: 0 4px 12px rgba(229, 190, 1, 0.25);
         }
 
         .btn-register:hover {
             background-color: #d4ae01;
-            transform: translateY(-1px);
         }
 
         .login-link {
@@ -125,7 +122,6 @@
             color: #111418;
             text-decoration: none;
             font-weight: 700;
-            transition: color 0.2s;
         }
 
         .login-link a:hover {
@@ -133,35 +129,35 @@
             text-decoration: underline;
         }
 
+        /* Mobile Responsive */
         @media (max-width: 600px) {
             .form-row {
                 grid-template-columns: 1fr;
                 gap: 0;
             }
-            .register-container {
-                padding: 30px 20px;
+            .register-wrapper {
+                padding: 25px 20px;
             }
         }
     </style>
 </head>
 <body>
 
-    <div class="register-container">
-        <div class="brand-header">
+    <div class="register-wrapper">
+        <div class="form-header">
             <h1>DC SOCIAL ACADEMY</h1>
-            <p>STUDENT REGISTRATION PORTAL</p>
+            <p>CREATE YOUR STUDENT ACCOUNT</p>
         </div>
 
         <form id="registerForm">
             <div class="form-row">
                 <div class="form-group">
                     <label>Last Name</label>
-                    <input type="text" id="regLastName" placeholder="e.g. Dela Cruz" required>
+                    <input type="text" id="regLastName" placeholder="Dela Cruz" required>
                 </div>
-
                 <div class="form-group">
                     <label>First Name</label>
-                    <input type="text" id="regFirstName" placeholder="e.g. Juan" required>
+                    <input type="text" id="regFirstName" placeholder="Juan" required>
                 </div>
             </div>
 
@@ -170,16 +166,15 @@
                     <label>Birthday</label>
                     <input type="date" id="regBday" required>
                 </div>
-
                 <div class="form-group">
                     <label>CP Number</label>
-                    <input type="text" id="regPhone" placeholder="e.g. 09123456789" required>
+                    <input type="text" id="regPhone" placeholder="09123456789" required>
                 </div>
             </div>
 
             <div class="form-group full-width">
                 <label>Email Address</label>
-                <input type="email" id="regEmail" placeholder="e.g. juan@gmail.com" required>
+                <input type="email" id="regEmail" placeholder="juan@gmail.com" required>
             </div>
 
             <div class="form-group full-width">
@@ -192,7 +187,6 @@
                     <label>Password</label>
                     <input type="password" id="regPassword" placeholder="Create password" required>
                 </div>
-
                 <div class="form-group">
                     <label>Retype Password</label>
                     <input type="password" id="regRetypePassword" placeholder="Confirm password" required>
@@ -204,14 +198,13 @@
                     <label>Access Code</label>
                     <input type="text" id="regCode" placeholder="Enter code" required>
                 </div>
-
                 <div class="form-group">
                     <label>PIN</label>
                     <input type="password" id="regPin" placeholder="Enter PIN" required>
                 </div>
             </div>
 
-            <button type="submit" class="btn-register">Register Account</button>
+            <button type="submit" class="btn-register">REGISTER ACCOUNT</button>
         </form>
 
         <div class="login-link">
