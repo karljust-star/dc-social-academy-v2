@@ -13,13 +13,13 @@
 </head>
 <body class="bg-gray-100 min-h-screen flex items-center justify-center p-4 sm:p-8 relative">
 
-    <!-- Admin Login Button - Diretsong magbubukas ng admin-dashboard.html -->
-    <a href="admin-dashboard.html" class="absolute top-4 right-4 text-xs font-semibold text-gray-600 hover:text-gray-900 bg-white px-3 py-1.5 rounded transition border border-gray-300 shadow-sm z-10">
+    <!-- ADMIN LOGIN BUTTON NA MAY SECURITY CHECK -->
+    <button onclick="adminLoginPrompt()" class="absolute top-4 right-4 bg-white hover:bg-gray-50 text-gray-700 text-xs font-bold px-3 py-2 rounded border border-gray-300 shadow-sm transition z-20 cursor-pointer">
         Admin Login
-    </a>
+    </button>
 
     <!-- Main Website Container -->
-    <div class="bg-white border border-gray-200 rounded-xl shadow-sm w-full max-w-5xl overflow-hidden flex flex-col md:flex-row min-h-[550px]">
+    <div class="bg-white border border-gray-200 rounded-xl shadow-sm w-full max-w-5xl overflow-hidden flex flex-col md:flex-row min-h-[550px] relative">
         
         <!-- LEFT SIDE: WELCOME SECTION -->
         <div class="w-full md:w-1/2 p-8 sm:p-12 flex flex-col justify-center border-b md:border-b-0 md:border-r border-gray-200">
@@ -89,7 +89,25 @@
         </div>
     </div>
 
-    <!-- Firebase Script para i-verify kung rehistrado ang username at password -->
+    <!-- ADMIN LOGIN VERIFICATION SCRIPT -->
+    <script>
+        function adminLoginPrompt() {
+            const user = prompt("Enter Admin Username:");
+            if (user === null) return; // Pag kinancel
+
+            const pass = prompt("Enter Admin Password:");
+            if (pass === null) return; // Pag kinancel
+
+            if (user === "DCADMIN3" && pass === "ADMIN123456") {
+                alert("Login successful! Redirecting to Admin Dashboard...");
+                window.location.href = "admin-dashboard.html";
+            } else {
+                alert("Error: Mali ang username o password!");
+            }
+        }
+    </script>
+
+    <!-- Firebase Script para sa Student Login -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
         import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
@@ -119,7 +137,6 @@
             loginStatus.className = "mt-4 text-center text-xs font-semibold text-gray-500";
 
             try {
-                // Hahanapin sa "users" collection sa database kung nagtutugma ang username at password/pin
                 const querySnapshot = await getDocs(collection(db, "users"));
                 let userFound = false;
 
@@ -133,12 +150,11 @@
                 if (userFound) {
                     loginStatus.textContent = "Login successful! Redirecting...";
                     loginStatus.className = "mt-4 text-center text-xs font-semibold text-green-600";
-                    // Kapag tama, ililipat sa student dashboard (o kung saan mang dashboard)
                     setTimeout(() => {
                         window.location.href = "dashboard.html";
                     }, 1000);
                 } else {
-                    loginStatus.textContent = "Error: Mali ang username o password/PIN mo, o wala pa sa sistema.";
+                    loginStatus.textContent = "Error: Mali ang username o password/PIN mo.";
                     loginStatus.className = "mt-4 text-center text-xs font-semibold text-red-600";
                 }
             } catch (error) {
