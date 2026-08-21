@@ -4,38 +4,108 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DC Social Academy</title>
-    <!-- Tailwind CSS para sa magandang disenyo -->
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 flex items-center justify-center h-screen">
+<body class="bg-slate-50 min-h-screen flex flex-col justify-between">
 
-    <div class="bg-white p-8 rounded-lg shadow-lg w-96">
-        <h2 class="text-2xl font-bold mb-6 text-center text-blue-600">DC Social Academy</h2>
-        
-        <!-- Form para sa pag-register o pag-save ng data -->
-        <form id="dataForm" class="space-y-4">
-            <div>
-                <label class="block text-gray-700 text-sm font-bold mb-2">Pangalan:</label>
-                <input type="text" id="nameInput" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+    <!-- Header / Navbar -->
+    <header class="bg-white shadow-sm py-4 px-6 flex justify-between items-center">
+        <h1 class="text-xl font-bold text-blue-600">DC Social Academy</h1>
+        <div id="navRight">
+            <button onclick="toggleAdminModal(true)" class="text-sm bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-lg font-medium transition">Admin Login</button>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow flex items-center justify-center p-4">
+
+        <!-- 1. STUDENT REGISTRATION VIEW (Lilitaw kapag user/estudyante) -->
+        <div id="studentView" class="bg-white p-6 sm:p-8 rounded-2xl shadow-xl w-full max-w-md border border-slate-100">
+            <h2 class="text-2xl font-bold mb-2 text-slate-800 text-center">Join Our Academy</h2>
+            <p class="text-slate-500 text-sm text-center mb-6">Punan ang form sa ibaba para mag-register.</p>
+            
+            <form id="dataForm" class="space-y-4">
+                <div>
+                    <label class="block text-slate-700 text-sm font-semibold mb-1">Buong Pangalan:</label>
+                    <input type="text" id="nameInput" required placeholder="Juan Dela Cruz" class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+                </div>
+                <div>
+                    <label class="block text-slate-700 text-sm font-semibold mb-1">Email Address:</label>
+                    <input type="email" id="emailInput" required placeholder="juan@example.com" class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+                </div>
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl transition duration-200 shadow-lg shadow-blue-500/20 text-sm">
+                    I-submit ang Registration
+                </button>
+            </form>
+            <p id="statusMsg" class="mt-4 text-center text-sm font-medium"></p>
+        </div>
+
+        <!-- 2. ADMIN DASHBOARD VIEW (Nakatago hangga't hindi nagre-log in bilang admin) -->
+        <div id="adminDashboardView" class="w-full max-w-5xl hidden">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-800">Admin Dashboard</h2>
+                    <p class="text-sm text-slate-500">Listahan ng mga nag-register mula sa Cloud Firebase.</p>
+                </div>
+                <button onclick="adminLogout()" class="bg-rose-50 hover:bg-rose-100 text-rose-600 font-semibold px-4 py-2 rounded-xl text-sm transition">
+                    Log out Admin
+                </button>
             </div>
-            <div>
-                <label class="block text-gray-700 text-sm font-bold mb-2">Email:</label>
-                <input type="email" id="emailInput" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+
+            <div class="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 border-b border-slate-100 text-slate-600 text-xs uppercase tracking-wider font-semibold">
+                                <th class="p-4">Pangalan</th>
+                                <th class="p-4">Email</th>
+                                <th class="p-4">Petsa ng Rehistro</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody" class="divide-y divide-slate-100 text-sm text-slate-700">
+                            <tr><td colspan="3" class="p-6 text-center text-slate-400">Nag-a-load ng data...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-lg font-bold hover:bg-blue-700 transition">
-                I-save sa Database
-            </button>
-        </form>
-        <p id="statusMsg" class="mt-4 text-center text-sm font-medium"></p>
+        </div>
+
+    </main>
+
+    <!-- ADMIN LOGIN MODAL -->
+    <div id="adminModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-2xl w-full max-w-sm border border-slate-100 relative">
+            <h3 class="text-xl font-bold text-slate-800 mb-2">Admin Login</h3>
+            <p class="text-slate-500 text-xs mb-4">Ilagay ang iyong credentials para buksan ang dashboard.</p>
+            
+            <form id="loginForm" class="space-y-4">
+                <div>
+                    <label class="block text-slate-700 text-xs font-semibold mb-1">Username:</label>
+                    <input type="text" id="userInput" required class="w-full px-3 py-2 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+                </div>
+                <div>
+                    <label class="block text-slate-700 text-xs font-semibold mb-1">Password:</label>
+                    <input type="password" id="passInput" required class="w-full px-3 py-2 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+                </div>
+                <div class="flex space-x-2 pt-2">
+                    <button type="button" onclick="toggleAdminModal(false)" class="w-1/2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-2.5 rounded-xl text-sm transition">Kanselahin</button>
+                    <button type="submit" class="w-1/2 bg-slate-900 hover:bg-slate-800 text-white font-semibold py-2.5 rounded-xl text-sm transition">Pumasok</button>
+                </div>
+            </form>
+            <p id="loginError" class="mt-3 text-center text-xs font-medium text-rose-600 hidden">Maling username o password!</p>
+        </div>
     </div>
 
-    <!-- Firebase SDK Scripts (Modular v11 / Latest using script tags) -->
-    <script type="module">
-        // Import ang Firebase SDK mula sa gstatic
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+    <!-- Footer -->
+    <footer class="text-center py-4 text-xs text-slate-400">
+        &copy; 2026 DC Social Academy. All rights reserved.
+    </footer>
 
-        // Ang iyong bagong Firebase configuration keys
+    <!-- Firebase SDK & Logic Script -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
         const firebaseConfig = {
             apiKey: "AIzaSyDMVxPTMiA1VTPnam91L9onX0G3DvBLoik",
             authDomain: "dc-social-academy-v2.firebaseapp.com",
@@ -45,11 +115,14 @@
             appId: "1:1000423422174:web:b5c45a2e9926be0b196a4f"
         };
 
-        // Initialize Firebase at Firestore
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Event listener para sa form submission
+        // Bagong Admin Credentials na hiningi mo
+        const ADMIN_USER = "ADMIN123456";
+        const ADMIN_PASS = "DCADMIN3";
+
+        // Student Form Submission
         const form = document.getElementById('dataForm');
         const statusMsg = document.getElementById('statusMsg');
 
@@ -59,22 +132,110 @@
             const email = document.getElementById('emailInput').value;
 
             try {
-                // Mag-save ng data sa Firestore collection na pinangalanang "users"
                 await addDoc(collection(db, "users"), {
                     name: name,
                     email: email,
                     createdAt: new Date()
                 });
 
-                statusMsg.textContent = "Tagumpay na na-save sa database!";
-                statusMsg.className = "mt-4 text-center text-sm font-medium text-green-600";
+                statusMsg.textContent = "Matagumpay na na-rehistro!";
+                statusMsg.className = "mt-4 text-center text-sm font-medium text-emerald-600";
                 form.reset();
             } catch (error) {
-                console.error("Error writing document: ", error);
-                statusMsg.textContent = "Nagka-error sa pag-save: " + error.message;
-                statusMsg.className = "mt-4 text-center text-sm font-medium text-red-600";
+                console.error("Error: ", error);
+                statusMsg.textContent = "May nangyaring error: " + error.message;
+                statusMsg.className = "mt-4 text-center text-sm font-medium text-rose-600";
             }
         });
+
+        // Admin Login Handling
+        const loginForm = document.getElementById('loginForm');
+        const loginError = document.getElementById('loginError');
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const user = document.getElementById('userInput').value;
+            const pass = document.getElementById('passInput').value;
+
+            if (user === ADMIN_USER && pass === ADMIN_PASS) {
+                sessionStorage.setItem("isAdminLoggedIn", "true");
+                toggleAdminModal(false);
+                showAdminDashboard();
+                loginForm.reset();
+                loginError.classList.add('hidden');
+            } else {
+                loginError.classList.remove('hidden');
+            }
+        });
+
+        // Check kung naka-login na dati sa session
+        if (sessionStorage.getItem("isAdminLoggedIn") === "true") {
+            showAdminDashboard();
+        }
+
+        window.toggleAdminModal = function(show) {
+            const modal = document.getElementById('adminModal');
+            if (show) {
+                modal.classList.remove('hidden');
+            } else {
+                modal.classList.add('hidden');
+                loginError.classList.add('hidden');
+            }
+        }
+
+        window.adminLogout = function() {
+            sessionStorage.removeItem("isAdminLoggedIn");
+            document.getElementById('adminDashboardView').classList.add('hidden');
+            document.getElementById('studentView').classList.remove('hidden');
+            document.getElementById('navRight').innerHTML = `<button onclick="toggleAdminModal(true)" class="text-sm bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-lg font-medium transition">Admin Login</button>`;
+        }
+
+        async function showAdminDashboard() {
+            document.getElementById('studentView').classList.add('hidden');
+            document.getElementById('adminDashboardView').classList.remove('hidden');
+            document.getElementById('navRight').innerHTML = `<span class="text-xs bg-blue-50 text-blue-600 font-semibold px-3 py-1.5 rounded-lg">Admin Mode</span>`;
+            await loadUsersToTable();
+        }
+
+        async function loadUsersToTable() {
+            const usersTableBody = document.getElementById('usersTableBody');
+            try {
+                const q = query(collection(db, "users"), orderBy("createdAt", "desc"));
+                const querySnapshot = await getDocs(q);
+                
+                usersTableBody.innerHTML = "";
+
+                if (querySnapshot.empty) {
+                    usersTableBody.innerHTML = `<tr><td colspan="3" class="p-6 text-center text-slate-400">Wala pang nakikitang rehistro sa database.</td></tr>`;
+                    return;
+                }
+
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    let dateStr = "N/A";
+                    if (data.createdAt && data.createdAt.toDate) {
+                        dateStr = data.createdAt.toDate().toLocaleString();
+                    }
+
+                    const row = `
+                        <tr class="hover:bg-slate-50/50 transition">
+                            <td class="p-4 font-medium text-slate-800">${escapeHtml(data.name)}</td>
+                            <td class="p-4 text-slate-600">${escapeHtml(data.email)}</td>
+                            <td class="p-4 text-slate-500 text-xs sm:text-sm">${dateStr}</td>
+                        </tr>
+                    `;
+                    usersTableBody.innerHTML += row;
+                });
+            } catch (error) {
+                console.error("Error loading users: ", error);
+                usersTableBody.innerHTML = `<tr><td colspan="3" class="p-6 text-center text-rose-500">Nagka-error sa pagkarga ng data mula sa database.</td></tr>`;
+            }
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
     </script>
 </body>
 </html>
