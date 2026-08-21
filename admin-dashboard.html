@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - DC Social Academy</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f4f6f9;
+            color: #333;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styling */
+        sidebar {
+            width: 260px;
+            background: #ffffff;
+            border-right: 1px solid #e5e7eb;
+            display: flex;
+            flex-direction: column;
+            padding: 24px;
+        }
+
+        .sidebar-brand {
+            font-size: 16px;
+            font-weight: 800;
+            color: #111418;
+            margin-bottom: 30px;
+            letter-spacing: 0.5px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .sidebar-menu a {
+            display: block;
+            padding: 12px 16px;
+            color: #4b5563;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 13.5px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background-color: #fef08a;
+            color: #111418;
+        }
+
+        .logout-btn {
+            background-color: #fee2e2;
+            color: #991b1b;
+            text-align: center;
+            margin-top: auto;
+        }
+
+        .logout-btn:hover {
+            background-color: #fecaca !important;
+            color: #991b1b !important;
+        }
+
+        /* Main Content Area */
+        .main-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: #ffffff;
+            padding: 20px 30px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            font-size: 20px;
+            font-weight: 800;
+            color: #111418;
+        }
+
+        .content-body {
+            padding: 30px;
+            flex: 1;
+        }
+
+        .card {
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+            margin-bottom: 20px;
+        }
+
+        .card h3 {
+            font-size: 16px;
+            color: #111418;
+            margin-bottom: 15px;
+            font-weight: 800;
+        }
+
+        /* Table Styling */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 13.5px;
+        }
+
+        th, td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        th {
+            background-color: #f9fafb;
+            color: #374151;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            color: #4b5563;
+        }
+
+        .empty-row {
+            text-align: center;
+            color: #9ca3af;
+            padding: 30px;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            sidebar {
+                width: 100%;
+                padding: 15px 20px;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                flex-wrap: wrap;
+            }
+            .sidebar-brand {
+                margin-bottom: 0;
+            }
+            .sidebar-menu {
+                flex-direction: row;
+                gap: 5px;
+                width: 100%;
+                margin-top: 10px;
+                overflow-x: auto;
+            }
+            .sidebar-menu a {
+                padding: 8px 12px;
+                font-size: 12px;
+                white-space: nowrap;
+            }
+            .logout-btn {
+                margin-top: 0;
+            }
+            .content-body {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <sidebar>
+        <div class="sidebar-brand">DC ADMIN</div>
+        <ul class="sidebar-menu">
+            <li><a href="#" class="active" onclick="switchTab('students-tab', this)">Students List</a></li>
+            <li><a href="#" onclick="switchTab('codes-tab', this)">Manage Codes</a></li>
+            <li><a href="index.html" class="logout-btn">Log Out</a></li>
+        </ul>
+    </sidebar>
+
+    <div class="main-container">
+        <header>
+            <h1 id="pageTitle">Listahan ng mga Estudyante</h1>
+        </header>
+
+        <div class="content-body">
+            <!-- Students Tab Content -->
+            <div id="students-tab" class="tab-content">
+                <div class="card">
+                    <h3>Registered Students</h3>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Username</th>
+                                    <th>Email</th>
+                                    <th>CP Number</th>
+                                    <th>Access Code</th>
+                                </tr>
+                            </thead>
+                            <tbody id="studentsTableBody">
+                                <!-- Dito papasok ang mga nakarehistro -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Codes Tab Content (Hidden muna by default) -->
+            <div id="codes-tab" class="tab-content" style="display: none;">
+                <div class="card">
+                    <h3>Access Codes Management</h3>
+                    <p style="font-size: 13.5px; color: #6b7280;">Dito mo makikita at mamamahala ang mga access code para sa mga estudyante.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab Switcher Function
+        function switchTab(tabId, element) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.style.display = 'none';
+            });
+            document.getElementById(tabId).style.display = 'block';
+
+            document.querySelectorAll('.sidebar-menu a').forEach(link => {
+                if(!link.classList.contains('logout-btn')) {
+                    link.classList.remove('active');
+                }
+            });
+            if(element && !element.classList.contains('logout-btn')) {
+                element.classList.add('active');
+            }
+
+            const title = document.getElementById('pageTitle');
+            if(tabId === 'students-tab') {
+                title.innerText = "Listahan ng mga Estudyante";
+                loadStudents();
+            } else if(tabId === 'codes-tab') {
+                title.innerText = "Manage Access Codes";
+            }
+        }
+
+        // Dummy loader muna para sa table habang wala pang database
+        function loadStudents() {
+            const tbody = document.getElementById('studentsTableBody');
+            // Pansamantalang local check para makita mo kung paano gagana ang display
+            const students = JSON.parse(localStorage.getItem('dc_students')) || [];
+
+            if(students.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="empty-row">Wala pang nakarehistrong estudyante.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = '';
+            students.forEach(s => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${s.lastName}, ${s.firstName}</td>
+                    <td>${s.username}</td>
+                    <td>${s.email}</td>
+                    <td>${s.phone}</td>
+                    <td>${s.code}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        window.onload = loadStudents;
+    </script>
+</body>
+</html>
