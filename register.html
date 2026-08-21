@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account - DC Social Academy</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f4f6f9;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .register-container {
+            background: #ffffff;
+            padding: 45px 40px;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 520px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+            border: 1px solid #e5e7eb;
+        }
+
+        .brand-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .brand-header h1 {
+            font-size: 26px;
+            color: #111418;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        .brand-header p {
+            font-size: 11px;
+            color: #6b7280;
+            letter-spacing: 2.5px;
+            margin-top: 6px;
+            font-weight: 700;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 11.5px;
+            color: #374151;
+            margin-bottom: 6px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 14px;
+            background: #f9fafb;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            color: #111418;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .form-group input:focus {
+            background: #fff;
+            border-color: #e5be01;
+            box-shadow: 0 0 0 3px rgba(229, 190, 1, 0.15);
+        }
+
+        .btn-register {
+            width: 100%;
+            background-color: #e5be01;
+            color: #111418;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 14.5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(229, 190, 1, 0.25);
+        }
+
+        .btn-register:hover {
+            background-color: #d4ae01;
+            transform: translateY(-1px);
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 13.5px;
+            color: #6b7280;
+        }
+
+        .login-link a {
+            color: #111418;
+            text-decoration: none;
+            font-weight: 700;
+            transition: color 0.2s;
+        }
+
+        .login-link a:hover {
+            color: #e5be01;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+            .register-container {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="register-container">
+        <div class="brand-header">
+            <h1>DC SOCIAL ACADEMY</h1>
+            <p>STUDENT REGISTRATION PORTAL</p>
+        </div>
+
+        <form id="registerForm">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Last Name</label>
+                    <input type="text" id="regLastName" placeholder="e.g. Dela Cruz" required>
+                </div>
+
+                <div class="form-group">
+                    <label>First Name</label>
+                    <input type="text" id="regFirstName" placeholder="e.g. Juan" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Birthday</label>
+                    <input type="date" id="regBday" required>
+                </div>
+
+                <div class="form-group">
+                    <label>CP Number</label>
+                    <input type="text" id="regPhone" placeholder="e.g. 09123456789" required>
+                </div>
+            </div>
+
+            <div class="form-group full-width">
+                <label>Email Address</label>
+                <input type="email" id="regEmail" placeholder="e.g. juan@gmail.com" required>
+            </div>
+
+            <div class="form-group full-width">
+                <label>Username</label>
+                <input type="text" id="regUsername" placeholder="Choose a username" required>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="regPassword" placeholder="Create password" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Retype Password</label>
+                    <input type="password" id="regRetypePassword" placeholder="Confirm password" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Access Code</label>
+                    <input type="text" id="regCode" placeholder="Enter code" required>
+                </div>
+
+                <div class="form-group">
+                    <label>PIN</label>
+                    <input type="password" id="regPin" placeholder="Enter PIN" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-register">Register Account</button>
+        </form>
+
+        <div class="login-link">
+            Already have an account? <a href="index.html">Log in here</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const password = document.getElementById('regPassword').value;
+            const retypePassword = document.getElementById('regRetypePassword').value;
+
+            if (password !== retypePassword) {
+                alert("Error: Password and Retype Password do not match!");
+                return;
+            }
+
+            alert("Registration successful!");
+            window.location.href = 'index.html';
+        });
+    </script>
+
+</body>
+</html>
