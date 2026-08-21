@@ -4,230 +4,202 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Account - DC Social Academy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
-
-        body {
-            background-color: #f4f6f9;
-            color: #333;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .register-wrapper {
-            background: #ffffff;
-            width: 100%;
-            max-width: 600px;
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
-            padding: 40px;
-            border: 1px solid #eef0f2;
-        }
-
-        .form-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .form-header h1 {
-            font-size: 26px;
-            color: #111418;
-            font-weight: 800;
-            letter-spacing: 0.5px;
-        }
-
-        .form-header p {
-            font-size: 11.5px;
-            color: #6b7280;
-            letter-spacing: 2px;
-            margin-top: 6px;
-            font-weight: 700;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
-        .form-group {
-            margin-bottom: 16px;
-        }
-
-        .form-group.full-width {
-            grid-column: span 2;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 11.5px;
-            color: #374151;
-            margin-bottom: 6px;
-            font-weight: 700;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px 14px;
-            background: #f9fafb;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-            font-size: 14px;
-            color: #111418;
-            outline: none;
-            transition: all 0.2s;
-        }
-
-        .form-group input:focus {
-            background: #fff;
-            border-color: #e5be01;
-            box-shadow: 0 0 0 3px rgba(229, 190, 1, 0.15);
-        }
-
-        .btn-register {
-            width: 100%;
-            background-color: #e5be01;
-            color: #111418;
-            border: none;
-            padding: 13px;
-            border-radius: 8px;
-            font-weight: 800;
-            font-size: 14px;
-            cursor: pointer;
-            transition: background 0.2s;
-            margin-top: 10px;
-            box-shadow: 0 4px 12px rgba(229, 190, 1, 0.25);
-        }
-
-        .btn-register:hover {
-            background-color: #d4ae01;
-        }
-
-        .login-link {
-            text-align: center;
-            margin-top: 24px;
-            font-size: 13.5px;
-            color: #6b7280;
-        }
-
-        .login-link a {
-            color: #111418;
-            text-decoration: none;
-            font-weight: 700;
-        }
-
-        .login-link a:hover {
-            color: #e5be01;
-            text-decoration: underline;
-        }
-
-        /* Mobile Responsive */
-        @media (max-width: 600px) {
-            .form-row {
-                grid-template-columns: 1fr;
-                gap: 0;
-            }
-            .register-wrapper {
-                padding: 25px 20px;
-            }
-        }
+        .text-gold { color: #d97706; }
+        .bg-gold { background-color: #d97706; }
+        .bg-gold:hover { background-color: #b45309; }
     </style>
 </head>
-<body>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4 sm:p-8">
 
-    <div class="register-wrapper">
-        <div class="form-header">
-            <h1>DC SOCIAL ACADEMY</h1>
-            <p>CREATE YOUR STUDENT ACCOUNT</p>
+    <div class="bg-white border border-gray-200 rounded-xl shadow-sm w-full max-w-2xl overflow-hidden p-8 sm:p-12">
+        
+        <div class="text-center mb-8">
+            <h1 class="text-2xl font-extrabold text-gray-800 tracking-tight">DC SOCIAL ACADEMY</h1>
+            <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider mt-1">CREATE YOUR STUDENT ACCOUNT</p>
         </div>
 
-        <form id="registerForm">
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Last Name</label>
-                    <input type="text" id="regLastName" placeholder="Dela Cruz" required>
+        <form id="registerForm" class="space-y-4">
+            <!-- Row 1: Last Name & First Name -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-gray-700 text-xs font-bold mb-1">Last Name</label>
+                    <input type="text" id="regLastName" required placeholder="Dela Cruz" class="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:border-amber-500 bg-white">
                 </div>
-                <div class="form-group">
-                    <label>First Name</label>
-                    <input type="text" id="regFirstName" placeholder="Juan" required>
-                </div>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Birthday</label>
-                    <input type="date" id="regBday" required>
-                </div>
-                <div class="form-group">
-                    <label>CP Number</label>
-                    <input type="text" id="regPhone" placeholder="09123456789" required>
+                <div>
+                    <label class="block text-gray-700 text-xs font-bold mb-1">First Name</label>
+                    <input type="text" id="regFirstName" required placeholder="Juan" class="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:border-amber-500 bg-white">
                 </div>
             </div>
 
-            <div class="form-group full-width">
-                <label>Email Address</label>
-                <input type="email" id="regEmail" placeholder="juan@gmail.com" required>
-            </div>
-
-            <div class="form-group full-width">
-                <label>Username</label>
-                <input type="text" id="regUsername" placeholder="Choose a username" required>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" id="regPassword" placeholder="Create password" required>
+            <!-- Row 2: Birthday & CP Number -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-gray-700 text-xs font-bold mb-1">Birthday</label>
+                    <input type="text" id="regBirthday" required placeholder="dd/mm/yyyy" class="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:border-amber-500 bg-white">
                 </div>
-                <div class="form-group">
-                    <label>Retype Password</label>
-                    <input type="password" id="regRetypePassword" placeholder="Confirm password" required>
+                <div>
+                    <label class="block text-gray-700 text-xs font-bold mb-1">CP Number</label>
+                    <input type="text" id="regPhone" required placeholder="09123456789" class="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:border-amber-500 bg-white">
                 </div>
             </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Access Code</label>
-                    <input type="text" id="regCode" placeholder="Enter code" required>
+            <!-- Row 3: Email Address -->
+            <div>
+                <label class="block text-gray-700 text-xs font-bold mb-1">Email Address</label>
+                <input type="email" id="regEmail" required placeholder="juan@gmail.com" class="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:border-amber-500 bg-white">
+            </div>
+
+            <!-- Row 4: Username -->
+            <div>
+                <label class="block text-gray-700 text-xs font-bold mb-1">Username</label>
+                <input type="text" id="regUsername" required placeholder="Choose a username" class="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:border-amber-500 bg-white">
+            </div>
+
+            <!-- Row 5: Password & Retype Password -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-gray-700 text-xs font-bold mb-1">Password</label>
+                    <input type="password" id="regPassword" required placeholder="Create password" class="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:border-amber-500 bg-white">
                 </div>
-                <div class="form-group">
-                    <label>PIN</label>
-                    <input type="password" id="regPin" placeholder="Enter PIN" required>
+                <div>
+                    <label class="block text-gray-700 text-xs font-bold mb-1">Retype Password</label>
+                    <input type="password" id="regRetypePassword" required placeholder="Confirm password" class="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:border-amber-500 bg-white">
                 </div>
             </div>
 
-            <button type="submit" class="btn-register">REGISTER ACCOUNT</button>
+            <!-- Row 6: Access Code & PIN -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-gray-700 text-xs font-bold mb-1">Access Code</label>
+                    <input type="text" id="regCode" required placeholder="Enter code" class="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:border-amber-500 bg-white">
+                </div>
+                <div>
+                    <label class="block text-gray-700 text-xs font-bold mb-1">PIN</label>
+                    <input type="password" id="regPin" required placeholder="Enter PIN" class="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:border-amber-500 bg-white">
+                </div>
+            </div>
+
+            <!-- Register Button -->
+            <div class="pt-2">
+                <button type="submit" class="w-full bg-gold text-white font-bold py-3 rounded text-xs tracking-wider transition uppercase">
+                    REGISTER
+                </button>
+            </div>
         </form>
 
-        <div class="login-link">
-            Already have an account? <a href="index.html">Log in here</a>
+        <p id="regStatus" class="mt-4 text-center text-xs font-semibold"></p>
+
+        <div class="text-center mt-6">
+            <span class="text-gray-500 text-xs">Already have an account? </span>
+            <a href="index.html" class="text-gold font-bold text-xs hover:underline">Login here</a>
         </div>
+
     </div>
 
-    <script>
-        document.getElementById('registerForm').addEventListener('submit', function(e) {
+    <!-- Firebase Script para sa Code Verification at Registration -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, updateDoc, doc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDMVxPTMiA1VTPnam91L9onX0G3DvBLoik",
+            authDomain: "dc-social-academy-v2.firebaseapp.com",
+            projectId: "dc-social-academy-v2",
+            storageBucket: "dc-social-academy-v2.firebasestorage.app",
+            messagingSenderId: "1000423422174",
+            appId: "1:1000423422174:web:b5c45a2e9926be0b196a4f"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const regForm = document.getElementById('registerForm');
+        const regStatus = document.getElementById('regStatus');
+
+        regForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
+            const lastName = document.getElementById('regLastName').value;
+            const firstName = document.getElementById('regFirstName').value;
+            const birthday = document.getElementById('regBirthday').value;
+            const phone = document.getElementById('regPhone').value;
+            const email = document.getElementById('regEmail').value;
+            const username = document.getElementById('regUsername').value;
             const password = document.getElementById('regPassword').value;
             const retypePassword = document.getElementById('regRetypePassword').value;
+            const inputCode = document.getElementById('regCode').value.trim();
+            const pin = document.getElementById('regPin').value;
 
-            if (password !== retypePassword) {
-                alert("Error: Password and Retype Password do not match!");
+            if(password !== retypePassword) {
+                regStatus.textContent = "Error: Hindi magkatugma ang Password at Retype Password.";
+                regStatus.className = "mt-4 text-center text-xs font-semibold text-red-600";
                 return;
             }
 
-            alert("Registration successful!");
-            window.location.href = 'index.html';
+            regStatus.textContent = "Sine-verify ang Access Code...";
+            regStatus.className = "mt-4 text-center text-xs font-semibold text-gray-500";
+
+            try {
+                // Suriin kung valid at unused ang code sa database galing sa admin generator
+                const codesSnapshot = await getDocs(collection(db, "codes"));
+                let targetCodeDocId = null;
+                let isAlreadyUsed = false;
+                let codeExists = false;
+
+                codesSnapshot.forEach((docItem) => {
+                    const data = docItem.data();
+                    if(data.code === inputCode) {
+                        codeExists = true;
+                        if(data.isUsed) {
+                            isAlreadyUsed = true;
+                        } else {
+                            targetCodeDocId = docItem.id;
+                        }
+                    }
+                });
+
+                if(!codeExists) {
+                    regStatus.textContent = "Error: Ang Access Code na ito ay hindi umiiral o galing sa admin.";
+                    regStatus.className = "mt-4 text-center text-xs font-semibold text-red-600";
+                    return;
+                }
+
+                if(isAlreadyUsed) {
+                    regStatus.textContent = "Error: Ang Access Code na ito ay nagamit na!";
+                    regStatus.className = "mt-4 text-center text-xs font-semibold text-red-600";
+                    return;
+                }
+
+                // I-save ang student account sa "users" collection
+                await addDoc(collection(db, "users"), {
+                    lastName,
+                    firstName,
+                    birthday,
+                    phone,
+                    email,
+                    username,
+                    password,
+                    code: inputCode,
+                    pin,
+                    createdAt: new Date()
+                });
+
+                // Markahan ang code bilang "used" sa admin codes list
+                await updateDoc(doc(db, "codes", targetCodeDocId), {
+                    isUsed: true
+                });
+
+                regStatus.textContent = "Registration successful! Maaari ka nang mag-login.";
+                regStatus.className = "mt-4 text-center text-xs font-semibold text-green-600";
+                regForm.reset();
+            } catch (error) {
+                console.error("Error:", error);
+                regStatus.textContent = "Error: " + error.message;
+                regStatus.className = "mt-4 text-center text-xs font-semibold text-red-600";
+            }
         });
     </script>
-
 </body>
 </html>

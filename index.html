@@ -3,34 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DC Social Academy - Login</title>
+    <title>DC Social Academy</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body {
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background-color: #f3f4f6;
-        }
-        .text-gold {
-            color: #d97706;
-        }
-        .bg-gold {
-            background-color: #d97706;
-        }
-        .bg-gold:hover {
-            background-color: #b45309;
-        }
+        .text-gold { color: #d97706; }
+        .bg-gold { background-color: #d97706; }
+        .bg-gold:hover { background-color: #b45309; }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-4 sm:p-8">
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4 sm:p-8 relative">
 
-    <!-- MAIN CONTAINER (SPLIT LAYOUT) -->
-    <div class="bg-[#f8f9fa] border border-gray-200 rounded-xl shadow-sm w-full max-w-5xl overflow-hidden flex flex-col md:flex-row min-h-[550px] relative">
+    <!-- Admin Login Button (Nakalagay sa itaas nang hindi sinisira ang layout mo) -->
+    <a href="admin-dashboard.html" class="absolute top-4 right-4 text-xs font-semibold text-gray-500 hover:text-gray-800 bg-white px-3 py-1.5 rounded transition border border-gray-300 shadow-sm z-10">
+        Admin Login
+    </a>
+
+    <!-- Main Website Container (Eksaktong itsura ng index.html mo) -->
+    <div class="bg-white border border-gray-200 rounded-xl shadow-sm w-full max-w-5xl overflow-hidden flex flex-col md:flex-row min-h-[550px]">
         
-        <!-- ADMIN BUTTON (Nasa Top Right corner ng pahina) -->
-        <button onclick="openAdminModal()" class="absolute top-4 right-4 text-xs font-semibold text-gray-500 hover:text-gray-800 bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded transition border border-gray-300 z-10">
-            Admin Access
-        </button>
-
         <!-- LEFT SIDE: WELCOME SECTION -->
         <div class="w-full md:w-1/2 p-8 sm:p-12 flex flex-col justify-center border-b md:border-b-0 md:border-r border-gray-200">
             <h1 class="text-4xl font-extrabold text-gold tracking-tight mb-2">DC</h1>
@@ -43,8 +33,7 @@
             </p>
 
             <div class="space-y-4">
-                <!-- Box 1 -->
-                <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
+                <div class="bg-[#f9fafb] p-4 rounded-xl border border-gray-100 shadow-sm">
                     <div class="flex items-center space-x-2 font-bold text-gray-800 text-sm mb-1">
                         <span>🎓</span>
                         <span>Step-by-step Tutorials</span>
@@ -52,8 +41,7 @@
                     <p class="text-gray-400 text-xs pl-6">Easy to follow training designed for beginners and pros.</p>
                 </div>
 
-                <!-- Box 2 -->
-                <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
+                <div class="bg-[#f9fafb] p-4 rounded-xl border border-gray-100 shadow-sm">
                     <div class="flex items-center space-x-2 font-bold text-gray-800 text-sm mb-1">
                         <span>🚀</span>
                         <span>Practical Strategies</span>
@@ -63,254 +51,41 @@
             </div>
         </div>
 
-        <!-- RIGHT SIDE: FORM SECTION (LOGIN & REGISTRATION) -->
-        <div class="w-full md:w-1/2 p-8 sm:p-12 flex flex-col justify-center items-center bg-[#f8f9fa]">
+        <!-- RIGHT SIDE: LOGIN FORM SECTION -->
+        <div class="w-full md:w-1/2 p-8 sm:p-12 flex flex-col justify-center items-center bg-white">
             <div class="w-full max-w-sm">
                 
-                <!-- User Icon Circle -->
-                <div class="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <svg class="w-8 h-8 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
+                <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
                     </svg>
                 </div>
 
-                <!-- 1. LOGIN FORM -->
-                <div id="loginFormContainer">
-                    <h3 class="text-xl font-bold text-gray-800 text-center mb-1">Login to your account</h3>
-                    <p class="text-gray-400 text-xs text-center mb-6">Enter your credentials to access your learning dashboard.</p>
+                <h3 class="text-xl font-bold text-gray-800 text-center mb-1">Login to your account</h3>
+                <p class="text-gray-400 text-xs text-center mb-6">Enter your credentials to access your learning dashboard.</p>
 
-                    <form id="loginForm" class="space-y-4">
-                        <div>
-                            <label class="block text-gray-600 text-xs font-semibold mb-1">Username</label>
-                            <input type="text" id="loginUsername" required placeholder="Enter your username" class="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:border-amber-500 bg-white">
-                        </div>
-                        <div>
-                            <label class="block text-gray-600 text-xs font-semibold mb-1">Password / PIN</label>
-                            <input type="password" id="loginPassword" required placeholder="Enter your password or PIN" class="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:border-amber-500 bg-white">
-                        </div>
-                        
-                        <button type="submit" class="w-full bg-gold text-white font-bold py-2.5 rounded text-xs tracking-wider transition uppercase mt-2">
-                            LOGIN
-                        </button>
-                    </form>
-
-                    <div class="text-center mt-6">
-                        <span class="text-gray-500 text-xs">Don't have an account? </span>
-                        <button onclick="toggleForm('register')" class="text-gold font-bold text-xs hover:underline">Create account</button>
+                <form id="loginForm" class="space-y-4">
+                    <div>
+                        <label class="block text-gray-600 text-xs font-semibold mb-1">Username</label>
+                        <input type="text" id="loginUsername" required placeholder="Enter your username" class="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:border-amber-500 bg-white">
                     </div>
-                </div>
-
-                <!-- 2. CREATE ACCOUNT / REGISTRATION FORM -->
-                <div id="registerFormContainer" class="hidden">
-                    <h3 class="text-xl font-bold text-gray-800 text-center mb-1">Create an Account</h3>
-                    <p class="text-gray-400 text-xs text-center mb-6">Fill in your details to register as a student.</p>
-
-                    <form id="registerForm" class="space-y-4">
-                        <div>
-                            <label class="block text-gray-600 text-xs font-semibold mb-1">Full Name</label>
-                            <input type="text" id="regName" required placeholder="Enter your full name" class="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:border-amber-500 bg-white">
-                        </div>
-                        <div>
-                            <label class="block text-gray-600 text-xs font-semibold mb-1">Email Address</label>
-                            <input type="email" id="regEmail" required placeholder="Enter your email" class="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:border-amber-500 bg-white">
-                        </div>
-                        <div>
-                            <label class="block text-gray-600 text-xs font-semibold mb-1">Password / PIN</label>
-                            <input type="password" id="regPassword" required placeholder="Create a password or PIN" class="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:border-amber-500 bg-white">
-                        </div>
-
-                        <button type="submit" class="w-full bg-gold text-white font-bold py-2.5 rounded text-xs tracking-wider transition uppercase mt-2">
-                            REGISTER ACCOUNT
-                        </button>
-                    </form>
-
-                    <p id="regStatus" class="mt-3 text-center text-xs font-semibold"></p>
-
-                    <div class="text-center mt-6">
-                        <span class="text-gray-500 text-xs">Already have an account? </span>
-                        <button onclick="toggleForm('login')" class="text-gold font-bold text-xs hover:underline">Login here</button>
-                    </div>
-                </div>
-
-                <!-- 3. ADMIN DASHBOARD VIEW (Lilitaw lang kapag nakapasok ang Admin) -->
-                <div id="adminDashboard" class="hidden">
-                    <div class="flex justify-between items-center mb-4 border-b pb-2">
-                        <h3 class="text-lg font-bold text-gray-800">Admin Dashboard</h3>
-                        <button onclick="logoutAdmin()" class="text-xs bg-red-100 text-red-600 hover:bg-red-200 px-2 py-1 rounded font-semibold">Logout</button>
+                    <div>
+                        <label class="block text-gray-600 text-xs font-semibold mb-1">Password / PIN</label>
+                        <input type="password" id="loginPassword" required placeholder="Enter your password or PIN" class="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:border-amber-500 bg-white">
                     </div>
                     
-                    <p class="text-xs text-gray-500 mb-3">Registered Students List (Firebase):</p>
+                    <button type="submit" class="w-full bg-gold text-white font-bold py-2.5 rounded text-xs tracking-wider transition uppercase mt-2">
+                        LOGIN
+                    </button>
+                </form>
 
-                    <div class="max-h-64 overflow-y-auto border border-gray-200 rounded bg-white">
-                        <table class="w-full text-left text-xs">
-                            <thead class="bg-gray-100 border-b border-gray-200">
-                                <tr>
-                                    <th class="p-2">Name</th>
-                                    <th class="p-2">Email</th>
-                                </tr>
-                            </thead>
-                            <tbody id="adminTableBody">
-                                <tr><td colspan="2" class="p-3 text-center text-gray-400">Loading data...</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
+                <div class="text-center mt-6">
+                    <span class="text-gray-500 text-xs">Don't have an account? </span>
+                    <a href="register.html" class="text-gold font-bold text-xs hover:underline">Create account</a>
                 </div>
-
             </div>
         </div>
-
     </div>
 
-    <!-- ADMIN LOGIN MODAL -->
-    <div id="adminModal" class="fixed inset-0 bg-black/50 hidden flex items-center justify-center p-4 z-50">
-        <div class="bg-white p-6 rounded-xl shadow-lg w-full max-w-xs">
-            <h3 class="text-lg font-bold text-gray-800 mb-2">Admin Login</h3>
-            <form id="adminLoginForm" class="space-y-3">
-                <div>
-                    <label class="block text-gray-600 text-xs font-semibold mb-1">Username</label>
-                    <input type="text" id="adminUser" required class="w-full px-3 py-1.5 border border-gray-300 rounded text-sm">
-                </div>
-                <div>
-                    <label class="block text-gray-600 text-xs font-semibold mb-1">Password</label>
-                    <input type="password" id="adminPass" required class="w-full px-3 py-1.5 border border-gray-300 rounded text-sm">
-                </div>
-                <div class="flex space-x-2 pt-2">
-                    <button type="button" onclick="closeAdminModal()" class="w-1/2 bg-gray-200 text-gray-700 py-2 rounded text-xs font-bold">Cancel</button>
-                    <button type="submit" class="w-1/2 bg-gray-900 text-white py-2 rounded text-xs font-bold">Login</button>
-                </div>
-            </form>
-            <p id="adminError" class="mt-2 text-center text-xs text-red-600 font-semibold hidden">Invalid Admin Credentials!</p>
-        </div>
-    </div>
-
-    <!-- FIREBASE SDK LOGIC -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyDMVxPTMiA1VTPnam91L9onX0G3DvBLoik",
-            authDomain: "dc-social-academy-v2.firebaseapp.com",
-            projectId: "dc-social-academy-v2",
-            storageBucket: "dc-social-academy-v2.firebasestorage.app",
-            messagingSenderId: "1000423422174",
-            appId: "1:1000423422174:web:b5c45a2e9926be0b196a4f"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        // Required Admin Credentials
-        const ADMIN_USERNAME = "ADMIN123456";
-        const ADMIN_PASSWORD = "DCADMIN3";
-
-        // Form Switching (Login <-> Create Account)
-        window.toggleForm = function(type) {
-            const loginBox = document.getElementById('loginFormContainer');
-            const regBox = document.getElementById('registerFormContainer');
-            const adminBox = document.getElementById('adminDashboard');
-
-            adminBox.classList.add('hidden');
-            if(type === 'register') {
-                loginBox.classList.add('hidden');
-                regBox.classList.remove('hidden');
-            } else {
-                regBox.classList.add('hidden');
-                loginBox.classList.remove('hidden');
-            }
-        };
-
-        // Handle Registration & Save to Firebase
-        const regForm = document.getElementById('registerForm');
-        const regStatus = document.getElementById('regStatus');
-
-        regForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const name = document.getElementById('regName').value;
-            const email = document.getElementById('regEmail').value;
-            const password = document.getElementById('regPassword').value;
-
-            try {
-                await addDoc(collection(db, "users"), {
-                    name: name,
-                    email: email,
-                    password: password,
-                    createdAt: new Date()
-                });
-
-                regStatus.textContent = "Account created successfully!";
-                regStatus.className = "mt-3 text-center text-xs font-semibold text-green-600";
-                regForm.reset();
-            } catch (error) {
-                console.error("Error: ", error);
-                regStatus.textContent = "Error: " + error.message;
-                regStatus.className = "mt-3 text-center text-xs font-semibold text-red-600";
-            }
-        });
-
-        // Admin Modal Controls
-        window.openAdminModal = function() {
-            document.getElementById('adminModal').classList.remove('hidden');
-        };
-
-        window.closeAdminModal = function() {
-            document.getElementById('adminModal').classList.add('hidden');
-            document.getElementById('adminError').classList.add('hidden');
-        };
-
-        // Admin Login Handling
-        const adminLoginForm = document.getElementById('adminLoginForm');
-        const adminError = document.getElementById('adminError');
-
-        adminLoginForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const u = document.getElementById('adminUser').value;
-            const p = document.getElementById('adminPass').value;
-
-            if (u === ADMIN_USERNAME && p === ADMIN_PASSWORD) {
-                closeAdminModal();
-                document.getElementById('loginFormContainer').classList.add('hidden');
-                document.getElementById('registerFormContainer').classList.add('hidden');
-                document.getElementById('adminDashboard').classList.remove('hidden');
-                await fetchAdminData();
-            } else {
-                adminError.classList.remove('hidden');
-            }
-        });
-
-        window.logoutAdmin = function() {
-            document.getElementById('adminDashboard').classList.add('hidden');
-            document.getElementById('loginFormContainer').classList.remove('hidden');
-            adminLoginForm.reset();
-        };
-
-        // Fetch Registered Students to Admin Panel
-        async function fetchAdminData() {
-            const tableBody = document.getElementById('adminTableBody');
-            try {
-                const q = query(collection(db, "users"), orderBy("createdAt", "desc"));
-                const querySnapshot = await getDocs(q);
-                tableBody.innerHTML = "";
-
-                if (querySnapshot.empty) {
-                    tableBody.innerHTML = `<tr><td colspan="2" class="p-3 text-center text-gray-400">No students registered yet.</td></tr>`;
-                    return;
-                }
-
-                querySnapshot.forEach((doc) => {
-                    const data = doc.data();
-                    tableBody.innerHTML += `
-                        <tr class="border-b border-gray-100">
-                            <td class="p-2 font-medium text-gray-700">${data.name || ''}</td>
-                            <td class="p-2 text-gray-500">${data.email || ''}</td>
-                        </tr>
-                    `;
-                });
-            } catch (err) {
-                console.error(err);
-                tableBody.innerHTML = `<tr><td colspan="2" class="p-3 text-center text-red-500">Error loading data.</td></tr>`;
-            }
-        }
-    </script>
 </body>
 </html>
