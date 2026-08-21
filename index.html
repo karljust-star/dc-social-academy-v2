@@ -3,281 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DC Social Academy - Login</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
-
-        body {
-            background-color: #f4f6f9;
-            color: #333;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .login-wrapper {
-            background: #ffffff;
-            width: 100%;
-            max-width: 950px;
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
-            display: flex;
-            overflow: hidden;
-            border: 1px solid #eef0f2;
-        }
-
-        /* Left Side: Welcome Banner */
-        .welcome-side {
-            flex: 1;
-            background: #ffffff;
-            padding: 50px 40px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            border-right: 1px solid #f1f3f5;
-        }
-
-        .welcome-side h1.brand-title {
-            font-size: 36px;
-            color: #d4ae01;
-            font-weight: 900;
-            letter-spacing: 1px;
-            margin-bottom: 5px;
-        }
-
-        .welcome-side h2 {
-            font-size: 28px;
-            color: #111418;
-            font-weight: 800;
-            margin-bottom: 15px;
-            line-height: 1.2;
-        }
-
-        .welcome-side p {
-            font-size: 14px;
-            color: #6b7280;
-            line-height: 1.5;
-            margin-bottom: 30px;
-        }
-
-        .feature-box {
-            background: #f9fafb;
-            border: 1px solid #e5e7eb;
-            padding: 16px 20px;
-            border-radius: 12px;
-            margin-bottom: 12px;
-        }
-
-        .feature-box h4 {
-            font-size: 14px;
-            color: #111418;
-            font-weight: 700;
-            margin-bottom: 4px;
-        }
-
-        .feature-box p {
-            font-size: 12.5px;
-            color: #6b7280;
-            margin: 0;
-        }
-
-        /* Right Side: Login Form */
-        .form-side {
-            flex: 1;
-            padding: 50px 40px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            background: #ffffff;
-        }
-
-        .form-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .user-icon {
-            width: 50px;
-            height: 50px;
-            background: #f3f4f6;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 15px;
-            color: #4b5563;
-            font-size: 20px;
-        }
-
-        .form-header h3 {
-            font-size: 22px;
-            color: #111418;
-            font-weight: 800;
-            margin-bottom: 6px;
-        }
-
-        .form-header p {
-            font-size: 13px;
-            color: #6b7280;
-        }
-
-        .input-group {
-            margin-bottom: 18px;
-        }
-
-        .input-group label {
-            display: block;
-            font-size: 12px;
-            font-weight: 700;
-            color: #374151;
-            margin-bottom: 6px;
-        }
-
-        .input-group input {
-            width: 100%;
-            padding: 12px 14px;
-            background: #f9fafb;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-            font-size: 14px;
-            color: #111418;
-            outline: none;
-            transition: all 0.2s;
-        }
-
-        .input-group input:focus {
-            background: #fff;
-            border-color: #e5be01;
-            box-shadow: 0 0 0 3px rgba(229, 190, 1, 0.15);
-        }
-
-        .btn-login {
-            width: 100%;
-            background-color: #e5be01;
-            color: #111418;
-            border: none;
-            padding: 13px;
-            border-radius: 8px;
-            font-weight: 800;
-            font-size: 14px;
-            cursor: pointer;
-            transition: background 0.2s;
-            margin-top: 10px;
-            box-shadow: 0 4px 12px rgba(229, 190, 1, 0.25);
-        }
-
-        .btn-login:hover {
-            background-color: #d4ae01;
-        }
-
-        .create-account-link {
-            text-align: center;
-            margin-top: 24px;
-            font-size: 13.5px;
-            color: #6b7280;
-        }
-
-        .create-account-link a {
-            color: #111418;
-            text-decoration: none;
-            font-weight: 700;
-        }
-
-        .create-account-link a:hover {
-            color: #e5be01;
-            text-decoration: underline;
-        }
-
-        /* Mobile Responsiveness (CP View) */
-        @media (max-width: 768px) {
-            .login-wrapper {
-                flex-direction: column;
-                max-width: 450px;
-            }
-            .welcome-side {
-                padding: 30px 20px;
-                border-right: none;
-                border-bottom: 1px solid #f1f3f5;
-            }
-            .form-side {
-                padding: 30px 20px;
-            }
-            .welcome-side h1.brand-title {
-                font-size: 28px;
-            }
-            .welcome-side h2 {
-                font-size: 22px;
-            }
-        }
-    </style>
+    <title>DC Social Academy</title>
+    <!-- Tailwind CSS para sa magandang disenyo -->
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-gray-100 flex items-center justify-center h-screen">
 
-    <div class="login-wrapper">
-        <!-- Left Welcome Section -->
-        <div class="welcome-side">
-            <h1 class="brand-title">DC</h1>
-            <h2>Welcome to<br>DC SOCIAL ACADEMY</h2>
-            <p>Your all-in-one platform to learn, grow, and master digital marketing and online success.</p>
-            
-            <div class="feature-box">
-                <h4>🎓 Step-by-step Tutorials</h4>
-                <p>Easy to follow training designed for beginners and pros.</p>
+    <div class="bg-white p-8 rounded-lg shadow-lg w-96">
+        <h2 class="text-2xl font-bold mb-6 text-center text-blue-600">DC Social Academy</h2>
+        
+        <!-- Form para sa pag-register o pag-save ng data -->
+        <form id="dataForm" class="space-y-4">
+            <div>
+                <label class="block text-gray-700 text-sm font-bold mb-2">Pangalan:</label>
+                <input type="text" id="nameInput" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
-            <div class="feature-box">
-                <h4>🚀 Practical Strategies</h4>
-                <p>Real-world applications to scale your digital career.</p>
+            <div>
+                <label class="block text-gray-700 text-sm font-bold mb-2">Email:</label>
+                <input type="email" id="emailInput" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
-        </div>
-
-        <!-- Right Login Form Section -->
-        <div class="form-side">
-            <div class="form-header">
-                <div class="user-icon">👤</div>
-                <h3>Login to your account</h3>
-                <p>Enter your credentials to access your learning dashboard.</p>
-            </div>
-
-            <form id="loginForm">
-                <div class="input-group">
-                    <label>Username</label>
-                    <input type="text" id="loginUsername" placeholder="Enter your username" required>
-                </div>
-
-                <div class="input-group">
-                    <label>Password / PIN</label>
-                    <input type="password" id="loginPassword" placeholder="Enter your password or PIN" required>
-                </div>
-
-                <button type="submit" class="btn-login">LOGIN</button>
-            </form>
-
-            <div class="create-account-link">
-                Don't have an account? <a href="register.html">Create account</a>
-            </div>
-        </div>
+            <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-lg font-bold hover:bg-blue-700 transition">
+                I-save sa Database
+            </button>
+        </form>
+        <p id="statusMsg" class="mt-4 text-center text-sm font-medium"></p>
     </div>
 
-    <script>
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
+    <!-- Firebase SDK Scripts (Modular v11 / Latest using script tags) -->
+    <script type="module">
+        // Import ang Firebase SDK mula sa gstatic
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+        // Ang iyong bagong Firebase configuration keys
+        const firebaseConfig = {
+            apiKey: "AIzaSyDMVxPTMiA1VTPnam91L9onX0G3DvBLoik",
+            authDomain: "dc-social-academy-v2.firebaseapp.com",
+            projectId: "dc-social-academy-v2",
+            storageBucket: "dc-social-academy-v2.firebasestorage.app",
+            messagingSenderId: "1000423422174",
+            appId: "1:1000423422174:web:b5c45a2e9926be0b196a4f"
+        };
+
+        // Initialize Firebase at Firestore
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Event listener para sa form submission
+        const form = document.getElementById('dataForm');
+        const statusMsg = document.getElementById('statusMsg');
+
+        form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const user = document.getElementById('loginUsername').value;
-            
-            // Dito natin iche-check sa database mamaya kung admin o student
-            if(user === 'admin') {
-                window.location.href = 'admin-dashboard.html';
-            } else {
-                window.location.href = 'dashboard.html';
+            const name = document.getElementById('nameInput').value;
+            const email = document.getElementById('emailInput').value;
+
+            try {
+                // Mag-save ng data sa Firestore collection na pinangalanang "users"
+                await addDoc(collection(db, "users"), {
+                    name: name,
+                    email: email,
+                    createdAt: new Date()
+                });
+
+                statusMsg.textContent = "Tagumpay na na-save sa database!";
+                statusMsg.className = "mt-4 text-center text-sm font-medium text-green-600";
+                form.reset();
+            } catch (error) {
+                console.error("Error writing document: ", error);
+                statusMsg.textContent = "Nagka-error sa pag-save: " + error.message;
+                statusMsg.className = "mt-4 text-center text-sm font-medium text-red-600";
             }
         });
     </script>
-
 </body>
 </html>
