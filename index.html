@@ -176,7 +176,7 @@
         }
         const db = firebase.firestore();
 
-        // Student Login Logic (Optimized & Flexible)
+        // Student Login Logic (Optimized & Flexible with Block Check)
         const loginForm = document.getElementById('loginForm');
         const loginStatus = document.getElementById('loginStatus');
 
@@ -213,6 +213,14 @@
 
                 if (userDoc) {
                     const data = userDoc.data();
+
+                    // Suriin kung ang account ay naka-block
+                    if (data.isBlocked === true) {
+                        loginStatus.textContent = "Error: Ang account na ito ay naka-block ng Administrator.";
+                        loginStatus.className = "mt-4 text-center text-xs font-semibold text-red-600";
+                        return; // Itigil ang proseso at huwag payagang mag-login
+                    }
+
                     const storedPass = data.password || data.pin || data.pass;
 
                     if (storedPass === inputPass) {
