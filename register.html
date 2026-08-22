@@ -45,19 +45,25 @@
                 </div>
             </div>
 
-            <!-- Row 3: Email Address -->
+            <!-- Row 3: Address (Bagong Dagdag) -->
+            <div>
+                <label class="block text-gray-700 text-xs font-bold mb-1">Address</label>
+                <input type="text" id="regAddress" required placeholder="Enter your full address" class="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:border-amber-500 bg-white">
+            </div>
+
+            <!-- Row 4: Email Address -->
             <div>
                 <label class="block text-gray-700 text-xs font-bold mb-1">Email Address</label>
                 <input type="email" id="regEmail" required placeholder="juan@gmail.com" class="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:border-amber-500 bg-white">
             </div>
 
-            <!-- Row 4: Username -->
+            <!-- Row 5: Username -->
             <div>
                 <label class="block text-gray-700 text-xs font-bold mb-1">Username</label>
                 <input type="text" id="regUsername" required placeholder="Choose a username" class="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:border-amber-500 bg-white">
             </div>
 
-            <!-- Row 5: Password & Retype Password -->
+            <!-- Row 6: Password & Retype Password -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-gray-700 text-xs font-bold mb-1">Password</label>
@@ -69,7 +75,7 @@
                 </div>
             </div>
 
-            <!-- Row 6: Access Code & PIN -->
+            <!-- Row 7: Access Code & PIN -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-gray-700 text-xs font-bold mb-1">Access Code</label>
@@ -125,6 +131,7 @@
             const firstName = document.getElementById('regFirstName').value;
             const birthday = document.getElementById('regBirthday').value;
             const phone = document.getElementById('regPhone').value;
+            const address = document.getElementById('regAddress').value; // Sinasama na ang address
             const email = document.getElementById('regEmail').value;
             const username = document.getElementById('regUsername').value;
             const password = document.getElementById('regPassword').value;
@@ -142,7 +149,6 @@
             regStatus.className = "mt-4 text-center text-xs font-semibold text-gray-500";
 
             try {
-                // Suriin kung valid at unused ang code sa database galing sa admin generator
                 const codesSnapshot = await getDocs(collection(db, "codes"));
                 let targetCodeDocId = null;
                 let isAlreadyUsed = false;
@@ -172,12 +178,13 @@
                     return;
                 }
 
-                // I-save ang student account sa "users" collection
+                // I-save ang student account kasama ang address sa "users" collection
                 await addDoc(collection(db, "users"), {
                     lastName,
                     firstName,
                     birthday,
                     phone,
+                    address,
                     email,
                     username,
                     password,
@@ -186,7 +193,6 @@
                     createdAt: new Date()
                 });
 
-                // Markahan ang code bilang "used" sa admin codes list
                 await updateDoc(doc(db, "codes", targetCodeDocId), {
                     isUsed: true
                 });
