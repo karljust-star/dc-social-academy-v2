@@ -222,7 +222,9 @@
 
                 if (loggedInUserData) {
                     // Save user details sa localStorage para mabasa ng dashboard
-                    localStorage.setItem('dc_user_firstname', loggedInUserData.firstName || loggedInUserData.fullName || "User");
+                    localStorage.setItem('dc_user_id', userDoc.id);
+                    localStorage.setItem('dc_user_fullname', loggedInUserData.fullName || loggedInUserData.firstName || "User");
+                    localStorage.setItem('dc_user_phone', loggedInUserData.cpNumber || loggedInUserData.phone || "");
                     localStorage.setItem('dc_user_email', loggedInUserData.email || "");
                     localStorage.setItem('dc_user_birthday', loggedInUserData.birthday || loggedInUserData.bday || "");
                     localStorage.setItem('dc_user_address', loggedInUserData.address || "");
