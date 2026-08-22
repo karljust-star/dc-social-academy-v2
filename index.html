@@ -221,9 +221,13 @@
                 }
 
                 if (loggedInUserData) {
+                    // I-format at i-capitalize ang full name para lumitaw nang maayos sa dashboard
+                    let rawName = loggedInUserData.fullName || ((loggedInUserData.firstName || "") + " " + (loggedInUserData.lastName || "")) || loggedInUserData.name || "User";
+                    let formattedName = rawName.trim().replace(/\b\w/g, l => l.toUpperCase());
+
                     // Save user details sa localStorage para mabasa ng dashboard
                     localStorage.setItem('dc_user_id', userDoc.id);
-                    localStorage.setItem('dc_user_fullname', loggedInUserData.fullName || loggedInUserData.firstName || "User");
+                    localStorage.setItem('dc_user_fullname', formattedName);
                     localStorage.setItem('dc_user_phone', loggedInUserData.cpNumber || loggedInUserData.phone || "");
                     localStorage.setItem('dc_user_email', loggedInUserData.email || "");
                     localStorage.setItem('dc_user_birthday', loggedInUserData.birthday || loggedInUserData.bday || "");
