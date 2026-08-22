@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Dashboard - DC Social Academy</title>
     
-    <!-- Firebase SDK (Compat Version para madaling gamitin sa script tags) -->
+    <!-- Firebase SDK Compat Version -->
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
@@ -89,6 +89,10 @@
             font-weight: 700;
             border-radius: 10px;
             transition: background 0.2s;
+            cursor: pointer;
+            border: none;
+            width: 100%;
+            text-align: left;
         }
 
         .logout-btn:hover {
@@ -392,7 +396,7 @@
                 <span style="font-size: 18px;">👑</span>
                 <p>YOU'RE AN ACADEMY PARTNER</p>
             </div>
-            <a href="index.html" class="logout-btn" onclick="logoutUser()">🚪 Logout</a>
+            <button onclick="logoutUser()" class="logout-btn">🚪 Logout</button>
         </div>
     </div>
 
@@ -564,16 +568,6 @@
                         <input type="password" id="retypePassword" placeholder="••••••••">
                     </div>
 
-                    <!-- Language Preference -->
-                    <div class="settings-section-title">Preferences</div>
-                    <div class="form-group">
-                        <label>Language Preference / Wika</label>
-                        <select id="languageSelect" onchange="changeLanguage()">
-                            <option value="en">English</option>
-                            <option value="tl">Tagalog</option>
-                        </select>
-                    </div>
-
                     <!-- Privacy and Security Log -->
                     <div class="settings-section-title">Privacy and Security</div>
                     <div class="form-group">
@@ -590,128 +584,86 @@
     </div>
 
     <script>
-        // --- 1. FIREBASE CONFIGURATION (Palitan ng sarili mong Firebase keys kung kinakailangan) ---
+        // --- FIREBASE CONFIGURATION ---
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_AUTH_DOMAIN",
+            apiKey: "AIzaSyDMVxPTMiA1VTPnam91L9onX0G3DvBLoik",
+            authDomain: "dc-social-academy-v2.firebaseapp.com",
             projectId: "dc-social-academy-v2",
-            storageBucket: "YOUR_STORAGE_BUCKET",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
+            storageBucket: "dc-social-academy-v2.firebasestorage.app",
+            messagingSenderId: "1000423422174",
+            appId: "1:1000423422174:web:b5c45a2e9926be0b196a4f"
         };
 
-        // Initialize Firebase kung hindi pa naka-initialize
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
         }
-
-        const auth = firebase.auth();
         const db = firebase.firestore();
 
-        // --- 2. AUTH & DATABASE DATA FETCHING ---
-        auth.onAuthStateChanged((user) => {
-            if (user) {
-                // May active session, kunin ang UID o i-query sa 'users' collection
-                // Kung ang Document ID sa Firestore ay katumbas ng user.uid:
-                const userId = user.uid;
+        // --- AUTH CHECK & LOAD DATA ---
+        window.addEventListener('DOMContentLoaded', () => {
+            const firstName = localStorage.getItem('dc_user_firstname');
+            const email = localStorage.getItem('dc_user_email');
+            const birthday = localStorage.getItem('dc_user_birthday');
+            const address = localStorage.getItem('dc_user_address');
+            const code = localStorage.getItem('dc_user_code');
+            const avatar = localStorage.getItem('dc_user_avatar');
 
-                db.collection("users").doc(userId).get().then((doc) => {
-                    if (doc.exists) {
-                        const data = doc.data();
-                        
-                        // Kunin ang firstName (Halimbawa: "angela") at i-capitalize
-                        const firstName = data.firstName ? data.firstName.charAt(0).toUpperCase() + data.firstName.slice(1) : "User";
-                        
-                        // Ilagay sa Dashboard Profile Name
-                        document.getElementById('userNameDisplay').innerText = firstName;
-                        
-                        // Ilagay sa Settings fields
-                        document.getElementById('settingFullName').value = firstName;
-                        document.getElementById('settingBirthday').value = data.birthday || "";
-                        document.getElementById('settingAddress').value = data.address || "";
-                        document.getElementById('settingEmail').value = data.email || user.email || "";
-                        document.getElementById('settingCode').value = data.code || "";
-                    } else {
-                        // Kung sakaling hindi doc.id ang gnamit kundi query by email o iba pa
-                        fetchUserByEmail(user.email);
-                    }
-                }).catch((error) => {
-                    console.error("Error fetching user data:", error);
-                });
-
-            } else {
-                // Kung walang naka-login, i-redirect pabalik sa login/index page
+            // Kung walang naka-login, ibalik sa index.html
+            if (!firstName) {
                 window.location.href = "index.html";
-            }
-        });
-
-        // Fallback kung email ang ginamit na paghanap sa database
-        function fetchUserByEmail(email) {
-            db.collection("users").where("email", "==", email).get().then((querySnapshot) => {
-                querySnapshot.forEach((doc) => {
-                    const data = doc.data();
-                    const firstName = data.firstName ? data.firstName.charAt(0).toUpperCase() + data.firstName.slice(1) : "User";
-                    
-                    document.getElementById('userNameDisplay').innerText = firstName;
-                    document.getElementById('settingFullName').value = firstName;
-                    document.getElementById('settingBirthday').value = data.birthday || "";
-                    document.getElementById('settingAddress').value = data.address || "";
-                    document.getElementById('settingEmail').value = data.email || "";
-                    document.getElementById('settingCode').value = data.code || "";
-                });
-            });
-        }
-
-        // --- 3. NAVIGATION & TABS ---
-        function switchTab(sectionId, element) {
-            document.querySelectorAll('.content-section').forEach(sec => {
-                sec.classList.remove('active-section');
-            });
-            document.querySelectorAll('.sidebar-menu a').forEach(link => {
-                link.classList.remove('active');
-            });
-
-            document.getElementById(sectionId).classList.add('active-section');
-            
-            if (element) {
-                element.classList.add('active');
-            }
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        // --- 4. LOGOUT FUNCTION ---
-        function logoutUser() {
-            auth.signOut().then(() => {
-                window.location.href = "index.html";
-            }).catch((error) => {
-                console.error("Error signing out: ", error);
-            });
-        }
-
-        // --- 5. LANGUAGE PREFERENCE TOGGLE ---
-        function changeLanguage() {
-            const lang = document.getElementById('languageSelect').value;
-            const welcomeText = document.getElementById('welcomeText');
-            if (lang === 'tl') {
-                welcomeText.innerText = 'Mabuhay ulit! 👋';
-            } else {
-                welcomeText.innerText = 'Welcome back! 👋';
-            }
-        }
-
-        // --- 6. SETTINGS FORM SUBMIT ---
-        document.getElementById('settingsForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const newPass = document.getElementById('newPassword').value;
-            const retypePass = document.getElementById('retypePassword').value;
-
-            if (newPass !== "" && newPass !== retypePass) {
-                alert("Error: New password and Re-type password do not match!");
                 return;
             }
 
-            alert("Settings updated successfully!");
+            // I-display sa UI
+            document.getElementById('userNameDisplay').textContent = firstName;
+            document.getElementById('welcomeText').textContent = `Welcome back, ${firstName}! 👋`;
+            
+            // I-fill ang Settings inputs
+            document.getElementById('settingFullName').value = firstName;
+            document.getElementById('settingBirthday').value = birthday || "N/A";
+            document.getElementById('settingAddress').value = address || "N/A";
+            document.getElementById('settingEmail').value = email || "N/A";
+            document.getElementById('settingCode').value = code || "N/A";
+
+            if (avatar) {
+                document.getElementById('profileAvatar').src = avatar;
+            }
         });
+
+        // --- TAB SWITCHER LOGIC ---
+        function switchTab(sectionId, navElement) {
+            document.querySelectorAll('.content-section').forEach(sec => {
+                sec.classList.remove('active-section');
+            });
+            document.getElementById(sectionId).classList.add('active-section');
+
+            if (navElement) {
+                document.querySelectorAll('.sidebar-menu a').forEach(a => {
+                    a.classList.remove('active');
+                });
+                navElement.classList.add('active');
+            }
+        }
+
+        // --- AVATAR UPLOAD LOGIC ---
+        document.getElementById('avatarUpload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const base64String = event.target.result;
+                    document.getElementById('profileAvatar').src = base64String;
+                    localStorage.setItem('dc_user_avatar', base64String);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // --- LOGOUT LOGIC ---
+        function logoutUser() {
+            localStorage.clear();
+            window.location.href = "index.html";
+        }
     </script>
 </body>
 </html>
