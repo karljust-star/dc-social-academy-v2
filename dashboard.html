@@ -63,6 +63,7 @@
             font-weight: 600;
             border-radius: 10px;
             transition: all 0.2s;
+            cursor: pointer;
         }
 
         .sidebar-menu a:hover, .sidebar-menu a.active {
@@ -191,6 +192,7 @@
             justify-content: space-between;
             align-items: center;
             transition: transform 0.2s;
+            cursor: pointer;
         }
 
         .course-card:hover {
@@ -245,7 +247,7 @@
             margin-bottom: 5px;
         }
 
-        .form-group input {
+        .form-group input, .form-group select {
             width: 100%;
             padding: 11px 14px;
             border: 1px solid #d1d5db;
@@ -254,9 +256,14 @@
             outline: none;
         }
 
-        .form-group input:focus {
+        .form-group input:focus, .form-group select:focus {
             border-color: #e5be01;
             box-shadow: 0 0 0 3px rgba(229, 190, 1, 0.15);
+        }
+
+        .form-group input:read-only {
+            background-color: #f3f4f6;
+            color: #6b7280;
         }
 
         .btn-save {
@@ -273,6 +280,45 @@
 
         .btn-save:hover {
             background: #d4ae01;
+        }
+
+        /* Course View Layout */
+        .back-link {
+            display: inline-block;
+            color: #e5be01;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+
+        .course-detail-box {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 14px;
+            border: 1px solid #eef0f2;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+        }
+
+        .video-container-box {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            background: #000;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        .video-container-box iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
         }
 
         /* Mobile View */
@@ -301,8 +347,8 @@
                 <h2>DC SOCIAL ACADEMY</h2>
             </div>
             <ul class="sidebar-menu">
-                <li><a href="#" class="active" onclick="switchTab('home-section', this)">🏠 Home</a></li>
-                <li><a href="#" onclick="switchTab('settings-section', this)">⚙️ Settings</a></li>
+                <li><a href="#" class="active" id="nav-home" onclick="switchTab('home-section', this)">🏠 Home</a></li>
+                <li><a href="#" id="nav-settings" onclick="switchTab('settings-section', this)">⚙️ Settings</a></li>
             </ul>
         </div>
 
@@ -321,11 +367,11 @@
         <!-- Top Header with Profile Picture Upload -->
         <div class="top-header">
             <div>
-                <h1>Welcome back! 👋</h1>
+                <h1 id="welcomeText">Welcome back! 👋</h1>
                 <p>Continue your learning journey.</p>
             </div>
             <div class="user-profile-area">
-                <span id="userNameDisplay" style="font-size: 13.5px; font-weight: 700;">Student</span>
+                <span id="userNameDisplay" style="font-size: 13.5px; font-weight: 700;">Karl Justin Sambayon</span>
                 <div class="avatar-container" title="Click to change profile picture">
                     <img id="profileAvatar" src="https://via.placeholder.com/150" alt="Profile">
                     <input type="file" id="avatarUpload" accept="image/*">
@@ -333,9 +379,9 @@
             </div>
         </div>
 
-        <!-- HOME SECTION -->
+        <!-- HOME SECTION (Course Cards) -->
         <div id="home-section" class="content-section active-section">
-            <div class="course-card">
+            <div class="course-card" onclick="switchTab('course-1', null)">
                 <div class="course-info">
                     <h3>📢 HOW TO CREATE ADS</h3>
                     <p>Learn how to create effective advertisements.</p>
@@ -343,7 +389,7 @@
                 <div class="arrow-icon">›</div>
             </div>
 
-            <div class="course-card">
+            <div class="course-card" onclick="switchTab('course-2', null)">
                 <div class="course-info">
                     <h3>💼 HOW TO CREATE PORTFOLIO</h3>
                     <p>Learn how to create your professional portfolio.</p>
@@ -351,7 +397,7 @@
                 <div class="arrow-icon">›</div>
             </div>
 
-            <div class="course-card">
+            <div class="course-card" onclick="switchTab('course-3', null)">
                 <div class="course-info">
                     <h3>🖼️ HOW TO CREATE AI PHOTO</h3>
                     <p>Learn how to create high-quality AI photos.</p>
@@ -359,7 +405,7 @@
                 <div class="arrow-icon">›</div>
             </div>
 
-            <div class="course-card">
+            <div class="course-card" onclick="switchTab('course-4', null)">
                 <div class="course-info">
                     <h3>🎬 HOW TO TURN YOUR VIDEO INTO AI VIDEO</h3>
                     <p>Learn how to transform your videos using AI.</p>
@@ -367,7 +413,7 @@
                 <div class="arrow-icon">›</div>
             </div>
 
-            <div class="course-card">
+            <div class="course-card" onclick="switchTab('course-5', null)">
                 <div class="course-info">
                     <h3>✍️ ALL ABOUT CONTENT CREATION</h3>
                     <p>Learn how to create engaging content that attracts your brand, builds your brand, and grows your audience.</p>
@@ -376,27 +422,113 @@
             </div>
         </div>
 
+        <!-- COURSE 1 DETAILS -->
+        <div id="course-1" class="content-section">
+            <a class="back-link" onclick="switchTab('home-section', document.getElementById('nav-home'))">‹ Back to Dashboard</a>
+            <div class="course-detail-box">
+                <h2 style="font-size: 20px; font-weight: 800; margin-bottom: 5px;">HOW TO CREATE ADS</h2>
+                <p style="color: #6b7280; font-size: 14px;">Learn how to create effective advertisements.</p>
+                <div class="video-container-box">
+                    <iframe src="https://www.youtube.com/embed/blPkdcj0qfQ" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+
+        <!-- COURSE 2 DETAILS -->
+        <div id="course-2" class="content-section">
+            <a class="back-link" onclick="switchTab('home-section', document.getElementById('nav-home'))">‹ Back to Dashboard</a>
+            <div class="course-detail-box">
+                <h2 style="font-size: 20px; font-weight: 800; margin-bottom: 5px;">HOW TO CREATE PORTFOLIO</h2>
+                <p style="color: #6b7280; font-size: 14px;">Learn how to create your professional portfolio.</p>
+                <div class="video-container-box">
+                    <iframe src="https://www.youtube.com/embed/gGfztu2t-gs" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+
+        <!-- COURSE 3 DETAILS -->
+        <div id="course-3" class="content-section">
+            <a class="back-link" onclick="switchTab('home-section', document.getElementById('nav-home'))">‹ Back to Dashboard</a>
+            <div class="course-detail-box">
+                <h2 style="font-size: 20px; font-weight: 800; margin-bottom: 5px;">HOW TO CREATE AI PHOTO</h2>
+                <p style="color: #6b7280; font-size: 14px;">Learn how to create high-quality AI photos.</p>
+                <div class="video-container-box">
+                    <iframe src="https://www.youtube.com/embed/aJg37TmKl6M" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+
+        <!-- COURSE 4 DETAILS -->
+        <div id="course-4" class="content-section">
+            <a class="back-link" onclick="switchTab('home-section', document.getElementById('nav-home'))">‹ Back to Dashboard</a>
+            <div class="course-detail-box">
+                <h2 style="font-size: 20px; font-weight: 800; margin-bottom: 5px;">HOW TO TURN YOUR VIDEO INTO AI VIDEO</h2>
+                <p style="color: #6b7280; font-size: 14px;">Learn how to transform your videos using AI.</p>
+                <div class="video-container-box">
+                    <iframe src="https://www.youtube.com/embed/aeYgN0kJigY" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+
+        <!-- COURSE 5 DETAILS -->
+        <div id="course-5" class="content-section">
+            <a class="back-link" onclick="switchTab('home-section', document.getElementById('nav-home'))">‹ Back to Dashboard</a>
+            <div class="course-detail-box">
+                <h2 style="font-size: 20px; font-weight: 800; margin-bottom: 5px;">ALL ABOUT CONTENT CREATION</h2>
+                <p style="color: #6b7280; font-size: 14px;">Learn how to create engaging content that attracts your brand, builds your brand, and grows your audience.</p>
+                <div class="video-container-box">
+                    <iframe src="https://www.youtube.com/embed/A8PxRHQrLJ8" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+
         <!-- SETTINGS SECTION -->
         <div id="settings-section" class="content-section">
             <div class="settings-card">
                 <h3>Account Settings</h3>
                 <form id="settingsForm">
+                    <!-- Account Details (Name readonly, Email & CP editable) -->
                     <div class="form-group">
-                        <label>First Name</label>
-                        <input type="text" id="settingFirstName" placeholder="First Name">
+                        <label>Full Name (From Registration)</label>
+                        <input type="text" id="settingFullName" value="Karl Justin Sambayon" readonly>
                     </div>
                     <div class="form-group">
-                        <label>Last Name</label>
-                        <input type="text" id="settingLastName" placeholder="Last Name">
+                        <label>Email Address (Editable)</label>
+                        <input type="email" id="settingEmail" value="karljustin@example.com">
                     </div>
                     <div class="form-group">
-                        <label>Email Address</label>
-                        <input type="email" id="settingEmail" placeholder="Email">
+                        <label>Mobile / CP Number (Editable)</label>
+                        <input type="text" id="settingPhone" value="+63 912 345 6789">
+                    </div>
+
+                    <!-- Change Password -->
+                    <div class="form-group" style="margin-top: 25px;">
+                        <label>Current Password</label>
+                        <input type="password" id="currentPassword" placeholder="••••••••">
                     </div>
                     <div class="form-group">
                         <label>New Password</label>
-                        <input type="password" id="settingPassword" placeholder="Leave blank to keep current password">
+                        <input type="password" id="newPassword" placeholder="Leave blank to keep current">
                     </div>
+
+                    <!-- Language Preference -->
+                    <div class="form-group" style="margin-top: 25px;">
+                        <label>Language Preference / Wika</label>
+                        <select id="languageSelect" onchange="changeLanguage()">
+                            <option value="en">English</option>
+                            <option value="tl">Tagalog</option>
+                        </select>
+                    </div>
+
+                    <!-- Privacy and Security Log -->
+                    <div class="form-group" style="margin-top: 25px;">
+                        <label>Privacy and Security Log</label>
+                        <div style="background: #f9fafb; border: 1px solid #e5e7eb; padding: 12px; border-radius: 8px; font-size: 13px; color: #4b5563;">
+                            🔒 Last Login: Today, 2:40 PM<br>
+                            Status: Secure session active.
+                        </div>
+                    </div>
+
                     <button type="submit" class="btn-save">Save Changes</button>
                 </form>
             </div>
@@ -414,7 +546,11 @@
             });
 
             document.getElementById(sectionId).classList.add('active-section');
-            element.classList.add('active');
+            
+            if (element) {
+                element.classList.add('active');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         const avatarInput = document.getElementById('avatarUpload');
@@ -443,6 +579,16 @@
             e.preventDefault();
             alert("Settings updated successfully!");
         });
+
+        function changeLanguage() {
+            const lang = document.getElementById('languageSelect').value;
+            const welcomeText = document.getElementById('welcomeText');
+            if (lang === 'tl') {
+                welcomeText.innerText = 'Mabuhay ulit! 👋';
+            } else {
+                welcomeText.innerText = 'Welcome back! 👋';
+            }
+        }
     </script>
 
 </body>
