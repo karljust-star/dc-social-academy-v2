@@ -71,8 +71,8 @@
 
                 <form id="loginForm" class="space-y-4">
                     <div>
-                        <label class="block text-gray-600 text-xs font-semibold mb-1">Username</label>
-                        <input type="text" id="loginUsername" required placeholder="Enter your username" class="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:border-amber-500 bg-white">
+                        <label class="block text-gray-600 text-xs font-semibold mb-1">Username or Code</label>
+                        <input type="text" id="loginUsername" required placeholder="Enter your username or code" class="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:border-amber-500 bg-white">
                     </div>
                     <div>
                         <label class="block text-gray-600 text-xs font-semibold mb-1">Password / PIN</label>
@@ -176,7 +176,7 @@
         }
         const db = firebase.firestore();
 
-        // Student Login Logic
+        // Student Login Logic (Optimized & Flexible)
         const loginForm = document.getElementById('loginForm');
         const loginStatus = document.getElementById('loginStatus');
 
@@ -190,21 +190,41 @@
             loginStatus.className = "mt-4 text-center text-xs font-semibold text-gray-500";
 
             try {
-                const querySnapshot = await db.collection("users").get();
                 let loggedInUserData = null;
+                let userDoc = null;
 
-                querySnapshot.forEach((doc) => {
-                    const data = doc.data();
-                    if (data.username === inputUser && (data.password === inputPass || data.pin === inputPass)) {
+                // Subukang hanapin muna kung username ang inilagay
+                let querySnapshot = await db.collection("users").where("username", "==", inputUser).get();
+                if (!querySnapshot.empty) {
+                    userDoc = querySnapshot.docs[0];
+                } else {
+                    // Kung walang username, subukang hanapin bilang code
+                    querySnapshot = await db.collection("users").where("code", "==", inputUser).get();
+                    if (!querySnapshot.empty) {
+                        userDoc = querySnapshot.docs[0];
+                    } else {
+                        // Kung wala pa rin, subukang hanapin bilang email
+                        querySnapshot = await db.collection("users").where("email", "==", inputUser).get();
+                        if (!querySnapshot.empty) {
+                            userDoc = querySnapshot.docs[0];
+                        }
+                    }
+                }
+
+                if (userDoc) {
+                    const data = userDoc.data();
+                    const storedPass = data.password || data.pin || data.pass;
+
+                    if (storedPass === inputPass) {
                         loggedInUserData = data;
                     }
-                });
+                }
 
                 if (loggedInUserData) {
                     // Save user details sa localStorage para mabasa ng dashboard
-                    localStorage.setItem('dc_user_firstname', loggedInUserData.firstName || "User");
+                    localStorage.setItem('dc_user_firstname', loggedInUserData.firstName || loggedInUserData.fullName || "User");
                     localStorage.setItem('dc_user_email', loggedInUserData.email || "");
-                    localStorage.setItem('dc_user_birthday', loggedInUserData.birthday || "");
+                    localStorage.setItem('dc_user_birthday', loggedInUserData.birthday || loggedInUserData.bday || "");
                     localStorage.setItem('dc_user_address', loggedInUserData.address || "");
                     localStorage.setItem('dc_user_code', loggedInUserData.code || "");
 
@@ -214,7 +234,7 @@
                         window.location.href = "dashboard.html";
                     }, 1000);
                 } else {
-                    loginStatus.textContent = "Error: Mali ang username o password/PIN mo.";
+                    loginStatus.textContent = "Error: Mali ang username/code o password/PIN mo.";
                     loginStatus.className = "mt-4 text-center text-xs font-semibold text-red-600";
                 }
             } catch (error) {
