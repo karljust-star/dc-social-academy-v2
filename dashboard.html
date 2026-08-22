@@ -133,7 +133,7 @@
             margin-top: 3px;
         }
 
-        /* Profile & Avatar */
+        /* Profile & Avatar - Exact match sa reference layout */
         .user-profile-area {
             display: flex;
             align-items: center;
@@ -147,12 +147,13 @@
 
         .avatar-container {
             position: relative;
-            width: 40px;
-            height: 40px;
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
             overflow: hidden;
             cursor: pointer;
             border: 2px solid #e5be01;
+            flex-shrink: 0;
         }
 
         .avatar-container img {
@@ -169,6 +170,23 @@
             height: 100%;
             opacity: 0;
             cursor: pointer;
+        }
+
+        .profile-text-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .profile-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: #111418;
+        }
+
+        .profile-role {
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 500;
         }
 
         /* Sections */
@@ -224,7 +242,7 @@
             padding: 30px;
             border-radius: 14px;
             border: 1px solid #eef0f2;
-            max-width: 600px;
+            max-width: 650px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
         }
 
@@ -233,6 +251,16 @@
             font-weight: 800;
             color: #111418;
             margin-bottom: 20px;
+        }
+
+        .settings-section-title {
+            font-size: 14px;
+            font-weight: 800;
+            color: #111418;
+            margin-top: 20px;
+            margin-bottom: 12px;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #f3f4f6;
         }
 
         .form-group {
@@ -275,7 +303,7 @@
             font-weight: 800;
             font-size: 14px;
             cursor: pointer;
-            margin-top: 10px;
+            margin-top: 15px;
         }
 
         .btn-save:hover {
@@ -304,7 +332,7 @@
         .video-container-box {
             position: relative;
             width: 100%;
-            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            padding-bottom: 56.25%;
             height: 0;
             background: #000;
             border-radius: 10px;
@@ -364,17 +392,20 @@
     <!-- Main Content Area -->
     <div class="main-content">
         
-        <!-- Top Header with Profile Picture Upload -->
+        <!-- Top Header with Profile Picture Upload & Exact Layout -->
         <div class="top-header">
             <div>
                 <h1 id="welcomeText">Welcome back! 👋</h1>
                 <p>Continue your learning journey.</p>
             </div>
             <div class="user-profile-area">
-                <span id="userNameDisplay" style="font-size: 13.5px; font-weight: 700;">Karl Justin Sambayon</span>
                 <div class="avatar-container" title="Click to change profile picture">
                     <img id="profileAvatar" src="https://via.placeholder.com/150" alt="Profile">
                     <input type="file" id="avatarUpload" accept="image/*">
+                </div>
+                <div class="profile-text-info">
+                    <span class="profile-name">Karl Justin Sambayon</span>
+                    <span class="profile-role">Academy Partner</span>
                 </div>
             </div>
         </div>
@@ -487,10 +518,20 @@
             <div class="settings-card">
                 <h3>Account Settings</h3>
                 <form id="settingsForm">
-                    <!-- Account Details (Name readonly, Email & CP editable) -->
+                    
+                    <!-- Account Details -->
+                    <div class="settings-section-title">Account Details</div>
                     <div class="form-group">
-                        <label>Full Name (From Registration)</label>
-                        <input type="text" id="settingFullName" value="Karl Justin Sambayon" readonly>
+                        <label>Full Name</label>
+                        <input type="text" value="Karl Justin Sambayon" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Birthday (BDAY)</label>
+                        <input type="text" value="January 1, 2000" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Address</label>
+                        <input type="text" value="Manila, Philippines" readonly>
                     </div>
                     <div class="form-group">
                         <label>Email Address (Editable)</label>
@@ -502,17 +543,23 @@
                     </div>
 
                     <!-- Change Password -->
-                    <div class="form-group" style="margin-top: 25px;">
+                    <div class="settings-section-title">Change Password</div>
+                    <div class="form-group">
                         <label>Current Password</label>
                         <input type="password" id="currentPassword" placeholder="••••••••">
                     </div>
                     <div class="form-group">
                         <label>New Password</label>
-                        <input type="password" id="newPassword" placeholder="Leave blank to keep current">
+                        <input type="password" id="newPassword" placeholder="••••••••">
+                    </div>
+                    <div class="form-group">
+                        <label>Re-type Password</label>
+                        <input type="password" id="retypePassword" placeholder="••••••••">
                     </div>
 
                     <!-- Language Preference -->
-                    <div class="form-group" style="margin-top: 25px;">
+                    <div class="settings-section-title">Preferences</div>
+                    <div class="form-group">
                         <label>Language Preference / Wika</label>
                         <select id="languageSelect" onchange="changeLanguage()">
                             <option value="en">English</option>
@@ -521,8 +568,8 @@
                     </div>
 
                     <!-- Privacy and Security Log -->
-                    <div class="form-group" style="margin-top: 25px;">
-                        <label>Privacy and Security Log</label>
+                    <div class="settings-section-title">Privacy and Security</div>
+                    <div class="form-group">
                         <div style="background: #f9fafb; border: 1px solid #e5e7eb; padding: 12px; border-radius: 8px; font-size: 13px; color: #4b5563;">
                             🔒 Last Login: Today, 2:40 PM<br>
                             Status: Secure session active.
@@ -577,6 +624,14 @@
 
         document.getElementById('settingsForm').addEventListener('submit', function(e) {
             e.preventDefault();
+            const newPass = document.getElementById('newPassword').value;
+            const retypePass = document.getElementById('retypePassword').value;
+
+            if (newPass !== "" && newPass !== retypePass) {
+                alert("Error: New password and Re-type password do not match!");
+                return;
+            }
+
             alert("Settings updated successfully!");
         });
 
