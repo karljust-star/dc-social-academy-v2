@@ -146,12 +146,10 @@
             const navStudents = document.getElementById('navStudents');
             const headerTitle = document.getElementById('headerTitle');
 
-            // I-hide lahat
             tabAdminPanel.classList.add('hidden');
             tabCodeSection.classList.add('hidden');
             tabStudentsSection.classList.add('hidden');
 
-            // Reset navigation styles
             [navAdminPanel, navCode, navStudents].forEach(nav => {
                 nav.className = "w-full text-left px-4 py-2.5 rounded text-gray-400 hover:text-white hover:bg-gray-800 text-sm font-medium transition";
             });
@@ -272,7 +270,6 @@
                 const blockBtnText = isBlocked ? "Unblock" : "Block";
                 const blockBtnClass = isBlocked ? "bg-green-600 hover:bg-green-700 text-white" : "bg-red-600 hover:bg-red-700 text-white";
                 
-                // Pagsamahin ang firstName at lastName para lumabas ang buong pangalan
                 const fullName = (student.firstName && student.lastName) 
                     ? `${student.firstName} ${student.lastName}` 
                     : (student.name || student.fullname || 'N/A');
@@ -300,7 +297,6 @@
             });
         }
 
-        // Search feature (Sinama na rin ang address sa pag-search)
         searchStudentInput.addEventListener('input', (e) => {
             const keyword = e.target.value.toLowerCase().trim();
             const filtered = allStudents.filter(s => {
@@ -312,14 +308,13 @@
             renderStudents(filtered);
         });
 
-        // Block / Unblock function
         window.toggleBlockStudent = async function(studentId, currentStatus) {
             try {
                 const studentRef = doc(db, "users", studentId);
                 await updateDoc(studentRef, {
                     isBlocked: !currentStatus
                 });
-                loadStudents(); // i-refresh ang listahan
+                loadStudents();
             } catch (error) {
                 console.error("Error updating block status:", error);
                 alert("Hindi na-update ang status ng estudyante.");
