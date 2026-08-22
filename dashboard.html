@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Dashboard - DC Social Academy</title>
+    
+    <!-- Firebase SDK (Compat Version para madaling gamitin sa script tags) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+
     <style>
         * {
             box-sizing: border-box;
@@ -133,7 +139,7 @@
             margin-top: 3px;
         }
 
-        /* Profile & Avatar - Exact match sa reference layout */
+        /* Profile & Avatar */
         .user-profile-area {
             display: flex;
             align-items: center;
@@ -181,6 +187,7 @@
             font-size: 14px;
             font-weight: 700;
             color: #111418;
+            text-transform: capitalize;
         }
 
         .profile-role {
@@ -385,14 +392,14 @@
                 <span style="font-size: 18px;">👑</span>
                 <p>YOU'RE AN ACADEMY PARTNER</p>
             </div>
-            <a href="index.html" class="logout-btn">🚪 Logout</a>
+            <a href="index.html" class="logout-btn" onclick="logoutUser()">🚪 Logout</a>
         </div>
     </div>
 
     <!-- Main Content Area -->
     <div class="main-content">
         
-        <!-- Top Header with Profile Picture Upload & Exact Layout -->
+        <!-- Top Header with Profile Picture Upload -->
         <div class="top-header">
             <div>
                 <h1 id="welcomeText">Welcome back! 👋</h1>
@@ -404,7 +411,7 @@
                     <input type="file" id="avatarUpload" accept="image/*">
                 </div>
                 <div class="profile-text-info">
-                    <span class="profile-name">Karl Justin Sambayon</span>
+                    <span class="profile-name" id="userNameDisplay">Loading...</span>
                     <span class="profile-role">Academy Partner</span>
                 </div>
             </div>
@@ -523,23 +530,23 @@
                     <div class="settings-section-title">Account Details</div>
                     <div class="form-group">
                         <label>Full Name</label>
-                        <input type="text" value="Karl Justin Sambayon" readonly>
+                        <input type="text" id="settingFullName" readonly>
                     </div>
                     <div class="form-group">
                         <label>Birthday (BDAY)</label>
-                        <input type="text" value="January 1, 2000" readonly>
+                        <input type="text" id="settingBirthday" readonly>
                     </div>
                     <div class="form-group">
                         <label>Address</label>
-                        <input type="text" value="Manila, Philippines" readonly>
+                        <input type="text" id="settingAddress" readonly>
                     </div>
                     <div class="form-group">
-                        <label>Email Address (Editable)</label>
-                        <input type="email" id="settingEmail" value="karljustin@example.com">
+                        <label>Email Address</label>
+                        <input type="email" id="settingEmail" readonly>
                     </div>
                     <div class="form-group">
-                        <label>Mobile / CP Number (Editable)</label>
-                        <input type="text" id="settingPhone" value="+63 912 345 6789">
+                        <label>Code</label>
+                        <input type="text" id="settingCode" readonly>
                     </div>
 
                     <!-- Change Password -->
@@ -571,8 +578,7 @@
                     <div class="settings-section-title">Privacy and Security</div>
                     <div class="form-group">
                         <div style="background: #f9fafb; border: 1px solid #e5e7eb; padding: 12px; border-radius: 8px; font-size: 13px; color: #4b5563;">
-                            🔒 Last Login: Today, 2:40 PM<br>
-                            Status: Secure session active.
+                            🔒 Status: Secure session active via Firebase.
                         </div>
                     </div>
 
@@ -584,6 +590,79 @@
     </div>
 
     <script>
+        // --- 1. FIREBASE CONFIGURATION (Palitan ng sarili mong Firebase keys kung kinakailangan) ---
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "dc-social-academy-v2",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        // Initialize Firebase kung hindi pa naka-initialize
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // --- 2. AUTH & DATABASE DATA FETCHING ---
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                // May active session, kunin ang UID o i-query sa 'users' collection
+                // Kung ang Document ID sa Firestore ay katumbas ng user.uid:
+                const userId = user.uid;
+
+                db.collection("users").doc(userId).get().then((doc) => {
+                    if (doc.exists) {
+                        const data = doc.data();
+                        
+                        // Kunin ang firstName (Halimbawa: "angela") at i-capitalize
+                        const firstName = data.firstName ? data.firstName.charAt(0).toUpperCase() + data.firstName.slice(1) : "User";
+                        
+                        // Ilagay sa Dashboard Profile Name
+                        document.getElementById('userNameDisplay').innerText = firstName;
+                        
+                        // Ilagay sa Settings fields
+                        document.getElementById('settingFullName').value = firstName;
+                        document.getElementById('settingBirthday').value = data.birthday || "";
+                        document.getElementById('settingAddress').value = data.address || "";
+                        document.getElementById('settingEmail').value = data.email || user.email || "";
+                        document.getElementById('settingCode').value = data.code || "";
+                    } else {
+                        // Kung sakaling hindi doc.id ang gnamit kundi query by email o iba pa
+                        fetchUserByEmail(user.email);
+                    }
+                }).catch((error) => {
+                    console.error("Error fetching user data:", error);
+                });
+
+            } else {
+                // Kung walang naka-login, i-redirect pabalik sa login/index page
+                window.location.href = "index.html";
+            }
+        });
+
+        // Fallback kung email ang ginamit na paghanap sa database
+        function fetchUserByEmail(email) {
+            db.collection("users").where("email", "==", email).get().then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const firstName = data.firstName ? data.firstName.charAt(0).toUpperCase() + data.firstName.slice(1) : "User";
+                    
+                    document.getElementById('userNameDisplay').innerText = firstName;
+                    document.getElementById('settingFullName').value = firstName;
+                    document.getElementById('settingBirthday').value = data.birthday || "";
+                    document.getElementById('settingAddress').value = data.address || "";
+                    document.getElementById('settingEmail').value = data.email || "";
+                    document.getElementById('settingCode').value = data.code || "";
+                });
+            });
+        }
+
+        // --- 3. NAVIGATION & TABS ---
         function switchTab(sectionId, element) {
             document.querySelectorAll('.content-section').forEach(sec => {
                 sec.classList.remove('active-section');
@@ -600,28 +679,27 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        const avatarInput = document.getElementById('avatarUpload');
-        const profileAvatar = document.getElementById('profileAvatar');
-
-        const savedAvatar = localStorage.getItem('dc_user_avatar');
-        if (savedAvatar) {
-            profileAvatar.src = savedAvatar;
+        // --- 4. LOGOUT FUNCTION ---
+        function logoutUser() {
+            auth.signOut().then(() => {
+                window.location.href = "index.html";
+            }).catch((error) => {
+                console.error("Error signing out: ", error);
+            });
         }
 
-        avatarInput.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    const base64String = event.target.result;
-                    profileAvatar.src = base64String;
-                    localStorage.setItem('dc_user_avatar', base64String);
-                    alert("Profile picture updated successfully!");
-                };
-                reader.readAsDataURL(file);
+        // --- 5. LANGUAGE PREFERENCE TOGGLE ---
+        function changeLanguage() {
+            const lang = document.getElementById('languageSelect').value;
+            const welcomeText = document.getElementById('welcomeText');
+            if (lang === 'tl') {
+                welcomeText.innerText = 'Mabuhay ulit! 👋';
+            } else {
+                welcomeText.innerText = 'Welcome back! 👋';
             }
-        });
+        }
 
+        // --- 6. SETTINGS FORM SUBMIT ---
         document.getElementById('settingsForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const newPass = document.getElementById('newPassword').value;
@@ -634,17 +712,6 @@
 
             alert("Settings updated successfully!");
         });
-
-        function changeLanguage() {
-            const lang = document.getElementById('languageSelect').value;
-            const welcomeText = document.getElementById('welcomeText');
-            if (lang === 'tl') {
-                welcomeText.innerText = 'Mabuhay ulit! 👋';
-            } else {
-                welcomeText.innerText = 'Welcome back! 👋';
-            }
-        }
     </script>
-
 </body>
 </html>
