@@ -91,7 +91,7 @@
             <div class="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
                 <h3 class="text-sm font-bold text-gray-800">Listahan ng mga Rehistradong Estudyante</h3>
                 <div class="w-full sm:w-72">
-                    <input type="text" id="searchStudentInput" placeholder="Mag-search ng pangalan o username..." class="w-full px-3 py-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-amber-500 bg-white">
+                    <input type="text" id="searchStudentInput" placeholder="Mag-search ng pangalan, username o address..." class="w-full px-3 py-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-amber-500 bg-white">
                 </div>
             </div>
             
@@ -101,6 +101,7 @@
                         <tr class="border-b border-gray-200 text-xs text-gray-500">
                             <th class="py-2 px-3 font-semibold">Name</th>
                             <th class="py-2 px-3 font-semibold">CP Number</th>
+                            <th class="py-2 px-3 font-semibold">Address</th>
                             <th class="py-2 px-3 font-semibold">Username</th>
                             <th class="py-2 px-3 font-semibold">Password</th>
                             <th class="py-2 px-3 font-semibold text-center">Aksyon (Block)</th>
@@ -108,7 +109,7 @@
                     </thead>
                     <tbody id="studentsTableBody">
                         <tr>
-                            <td colspan="5" class="py-4 text-center text-xs text-gray-400 italic">Naglo-load ng mga estudyante...</td>
+                            <td colspan="6" class="py-4 text-center text-xs text-gray-400 italic">Naglo-load ng mga estudyante...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -254,7 +255,7 @@
                 renderStudents(allStudents);
             } catch (error) {
                 console.error("Error loading students:", error);
-                studentsTableBody.innerHTML = `<tr><td colspan="5" class="py-4 text-center text-xs text-red-500">Error sa pagkolekta ng data ng estudyante.</td></tr>`;
+                studentsTableBody.innerHTML = `<tr><td colspan="6" class="py-4 text-center text-xs text-red-500">Error sa pagkolekta ng data ng estudyante.</td></tr>`;
             }
         }
 
@@ -262,7 +263,7 @@
             studentsTableBody.innerHTML = "";
 
             if(students.length === 0) {
-                studentsTableBody.innerHTML = `<tr><td colspan="5" class="py-4 text-center text-xs text-gray-400 italic">Walang nahanap na estudyante.</td></tr>`;
+                studentsTableBody.innerHTML = `<tr><td colspan="6" class="py-4 text-center text-xs text-gray-400 italic">Walang nahanap na estudyante.</td></tr>`;
                 return;
             }
 
@@ -271,12 +272,23 @@
                 const blockBtnText = isBlocked ? "Unblock" : "Block";
                 const blockBtnClass = isBlocked ? "bg-green-600 hover:bg-green-700 text-white" : "bg-red-600 hover:bg-red-700 text-white";
                 
+                // Pagsamahin ang firstName at lastName para lumabas ang buong pangalan
+                const fullName = (student.firstName && student.lastName) 
+                    ? `${student.firstName} ${student.lastName}` 
+                    : (student.name || student.fullname || 'N/A');
+
+                const studentAddress = student.address || 'N/A';
+                const studentPhone = student.phone || student.cpNumber || 'N/A';
+                const studentUsername = student.username || 'N/A';
+                const studentPassword = student.password || student.pin || 'N/A';
+
                 const row = `
                     <tr class="border-b border-gray-100 text-xs text-gray-700">
-                        <td class="py-3 px-3 font-semibold">${student.name || student.fullname || 'N/A'}</td>
-                        <td class="py-3 px-3">${student.cpNumber || student.phone || 'N/A'}</td>
-                        <td class="py-3 px-3 font-mono">${student.username || 'N/A'}</td>
-                        <td class="py-3 px-3 font-mono">${student.password || student.pin || 'N/A'}</td>
+                        <td class="py-3 px-3 font-semibold">${fullName}</td>
+                        <td class="py-3 px-3">${studentPhone}</td>
+                        <td class="py-3 px-3">${studentAddress}</td>
+                        <td class="py-3 px-3 font-mono">${studentUsername}</td>
+                        <td class="py-3 px-3 font-mono">${studentPassword}</td>
                         <td class="py-3 px-3 text-center">
                             <button onclick="toggleBlockStudent('${student.id}', ${isBlocked})" class="px-3 py-1 rounded text-[11px] font-bold transition ${blockBtnClass}">
                                 ${blockBtnText}
@@ -288,13 +300,14 @@
             });
         }
 
-        // Search feature
+        // Search feature (Sinama na rin ang address sa pag-search)
         searchStudentInput.addEventListener('input', (e) => {
             const keyword = e.target.value.toLowerCase().trim();
             const filtered = allStudents.filter(s => {
-                const name = (s.name || s.fullname || '').toLowerCase();
+                const fullName = `${s.firstName || ''} ${s.lastName || ''} ${s.name || s.fullname || ''}`.toLowerCase();
                 const username = (s.username || '').toLowerCase();
-                return name.includes(keyword) || username.includes(keyword);
+                const address = (s.address || '').toLowerCase();
+                return fullName.includes(keyword) || username.includes(keyword) || address.includes(keyword);
             });
             renderStudents(filtered);
         });
