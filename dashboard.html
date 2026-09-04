@@ -10,6 +10,10 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 
+    <!-- Cropper.js para sa Avatar Cropping & Zooming -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+
     <style>
         * {
             box-sizing: border-box;
@@ -365,7 +369,7 @@
             border: none;
         }
 
-        /* --- AVATAR CROP / PREVIEW MODAL STYLES --- */
+        /* --- CROPPER MODAL STYLES (New Feature) --- */
         #avatarModal {
             display: none;
             position: fixed;
@@ -383,7 +387,7 @@
             background: #fff;
             padding: 25px;
             border-radius: 14px;
-            width: 350px;
+            width: 360px;
             text-align: center;
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
         }
@@ -395,26 +399,23 @@
             color: #111418;
         }
 
-        .preview-circle {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            overflow: hidden;
-            margin: 0 auto 15px auto;
-            border: 3px solid #e5be01;
+        .img-container {
+            width: 100%;
+            max-height: 250px;
+            margin-bottom: 15px;
             background: #f3f4f6;
+            overflow: hidden;
         }
 
-        .preview-circle img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        .img-container img {
+            max-width: 100%;
+            display: block;
         }
 
         .modal-buttons {
             display: flex;
             gap: 10px;
-            margin-top: 20px;
+            margin-top: 15px;
         }
 
         .modal-btn {
@@ -661,17 +662,16 @@
 
     </div>
 
-    <!-- AVATAR PREVIEW & SAVE MODAL -->
+    <!-- AVATAR CROPPER MODAL -->
     <div id="avatarModal">
         <div class="modal-content">
-            <h3>I-preview ang Avatar</h3>
-            <div class="preview-circle">
-                <img id="modalPreviewImg" src="" alt="Preview">
+            <h3>Crop Picture</h3>
+            <div class="img-container">
+                <img id="imageToCrop" src="" alt="Source">
             </div>
-            <p style="font-size: 12px; color: #6b7280; margin-bottom: 10px;">Gusto mo bang gamitin ang litratong ito?</p>
             <div class="modal-buttons">
-                <button type="button" class="modal-btn btn-cancel" onclick="closeAvatarModal()">Kanselahin</button>
-                <button type="button" class="modal-btn btn-confirm" onclick="confirmAvatarUpload()">I-save sa Firebase</button>
+                <button type="button" class="modal-btn btn-cancel" onclick="closeAvatarModal()">Cancel</button>
+                <button type="button" class="modal-btn btn-confirm" onclick="cropAndSaveAvatar()">Crop & Save</button>
             </div>
         </div>
     </div>
@@ -692,7 +692,8 @@
         }
         const db = firebase.firestore();
 
-        let pendingBase64Image = null;
+        let cropper = null;
+        const imageToCrop = document.getElementById('imageToCrop');
 
         // --- AUTH CHECK & LOAD DATA ---
         window.addEventListener('DOMContentLoaded', async () => {
@@ -703,24 +704,20 @@
             const address = localStorage.getItem('dc_user_address');
             const userId = localStorage.getItem('dc_user_id');
 
-            // Kung walang naka-login, ibalik sa index.html
             if (!fullName) {
                 window.location.href = "index.html";
                 return;
             }
 
-            // I-display sa UI ang BUONG Full Name sa upper right at welcome text
             document.getElementById('userNameDisplay').textContent = fullName;
             document.getElementById('welcomeText').textContent = `Welcome back, ${fullName}! 👋`;
             
-            // I-fill ang Settings inputs (Full Name, Birthday, Email, CP Number, at Address)
             document.getElementById('settingFullName').value = fullName;
             document.getElementById('settingBirthday').value = birthday || "N/A";
             document.getElementById('settingEmail').value = email || "N/A";
             document.getElementById('settingPhone').value = phone || "N/A";
             document.getElementById('settingAddress').value = address || "N/A";
 
-            // Kunin ang Avatar mula sa Firebase Firestore para laging updated kahit anong device
             if (userId) {
                 try {
                     const userDoc = await db.collection("users").doc(userId).get();
@@ -748,50 +745,67 @@
             }
         }
 
-        // --- AVATAR SELECTION & MODAL PREVIEW ---
+        // --- AVATAR FILE SELECT & CROPPER INIT ---
         document.getElementById('avatarUpload').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
+            const files = e.target.files;
+            if (files && files.length > 0) {
                 const reader = new FileReader();
                 reader.onload = function(event) {
-                    pendingBase64Image = event.target.result;
-                    document.getElementById('modalPreviewImg').src = pendingBase64Image;
-                    document.getElementById('avatarModal').style.display = 'flex'; // Ipakita ang Modal
+                    imageToCrop.src = event.target.result;
+                    document.getElementById('avatarModal').style.display = 'flex';
+
+                    if (cropper) {
+                        cropper.destroy();
+                    }
+                    cropper = new Cropper(imageToCrop, {
+                        aspectRatio: 1,
+                        viewMode: 1,
+                        autoCropArea: 0.8,
+                        responsive: true,
+                    });
                 };
-                reader.readAsDataURL(file);
+                reader.readAsDataURL(files[0]);
             }
         });
 
         function closeAvatarModal() {
             document.getElementById('avatarModal').style.display = 'none';
-            pendingBase64Image = null;
-            document.getElementById('avatarUpload').value = ""; // I-reset ang input
+            if (cropper) {
+                cropper.destroy();
+                cropper = null;
+            }
+            document.getElementById('avatarUpload').value = "";
         }
 
-        async function confirmAvatarUpload() {
-            const userId = localStorage.getItem('dc_user_id');
-            if (pendingBase64Image) {
-                // I-update agad ang UI
-                document.getElementById('profileAvatar').src = pendingBase64Image;
-                document.getElementById('avatarModal').style.display = 'none';
+        async function cropAndSaveAvatar() {
+            if (!cropper) return;
 
-                // I-save sa Firebase Firestore
+            const canvas = cropper.getCroppedCanvas({
+                width: 150,
+                height: 150,
+            });
+
+            if (canvas) {
+                const croppedBase64 = canvas.toDataURL('image/jpeg');
+
+                document.getElementById('profileAvatar').src = croppedBase64;
+                closeAvatarModal();
+
+                const userId = localStorage.getItem('dc_user_id');
                 if (userId) {
                     try {
                         await db.collection("users").doc(userId).update({
-                            avatar: pendingBase64Image
+                            avatar: croppedBase64
                         });
-                        console.log("Tagumpay na nai-save ang avatar sa Firebase!");
+                        console.log("Avatar successfully cropped and saved to Firebase!");
                     } catch (err) {
-                        console.error("Error saving avatar to Firebase:", err);
+                        console.error("Error saving cropped avatar to Firebase:", err);
                     }
                 }
-                pendingBase64Image = null;
-                document.getElementById('avatarUpload').value = "";
             }
         }
 
-        // --- SAVE SETTINGS LOGIC (Change Password with Current Password Check) ---
+        // --- SAVE SETTINGS LOGIC ---
         document.getElementById('settingsForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const statusMsg = document.getElementById('settingsStatus');
@@ -802,32 +816,32 @@
 
             if (!userId) {
                 statusMsg.style.color = "red";
-                statusMsg.textContent = "Error: Hindi mahanap ang user session. Mag-login ulit.";
+                statusMsg.textContent = "Error: User session not found. Please log in again.";
                 return;
             }
 
             if (!currentPassInput || !newPass || !retypePass) {
                 statusMsg.style.color = "red";
-                statusMsg.textContent = "Mangyaring punan ang lahat ng password fields.";
+                statusMsg.textContent = "Please fill in all password fields.";
                 return;
             }
 
             if (newPass !== retypePass) {
                 statusMsg.style.color = "red";
-                statusMsg.textContent = "Hindi magkatugma ang bagong password at retype password!";
+                statusMsg.textContent = "New password and retype password do not match!";
                 return;
             }
 
             try {
                 statusMsg.style.color = "gray";
-                statusMsg.textContent = "Binibigyang-siguro ang kasalukuyang password...";
+                statusMsg.textContent = "Verifying current password...";
 
                 const userDocRef = db.collection("users").doc(userId);
                 const docSnap = await userDocRef.get();
 
                 if (!docSnap.exists) {
-                    statusMsg.style.color.color = "red";
-                    statusMsg.textContent = "Hindi natagpuan ang account sa database.";
+                    statusMsg.style.color = "red";
+                    statusMsg.textContent = "Account not found in database.";
                     return;
                 }
 
@@ -836,11 +850,11 @@
 
                 if (currentPassInput !== actualPassword) {
                     statusMsg.style.color = "red";
-                    statusMsg.textContent = "Mali ang iyong kasalukuyang password (Current Password)!";
+                    statusMsg.textContent = "Incorrect current password!";
                     return;
                 }
 
-                statusMsg.textContent = "Sine-save ang bagong password...";
+                statusMsg.textContent = "Saving new password...";
 
                 await userDocRef.update({
                     password: newPass,
@@ -848,7 +862,7 @@
                 });
 
                 statusMsg.style.color = "green";
-                statusMsg.textContent = "Tagumpay na na-update ang iyong password!";
+                statusMsg.textContent = "Password successfully updated!";
                 
                 document.getElementById('currentPassword').value = "";
                 document.getElementById('newPassword').value = "";
@@ -857,7 +871,7 @@
             } catch (error) {
                 console.error("Error updating password:", error);
                 statusMsg.style.color = "red";
-                statusMsg.textContent = "Nabigo sa pag-save. Subukang muli.";
+                statusMsg.textContent = "Failed to save changes. Please try again.";
             }
         });
 
