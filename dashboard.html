@@ -5,12 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Dashboard - DC Social Academy</title>
     
-    <!-- Firebase SDK Compat Version -->
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 
-    <!-- Cropper.js para sa Avatar Cropping & Zooming -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
 
@@ -465,7 +463,6 @@
 </head>
 <body>
 
-    <!-- Sidebar -->
     <div class="sidebar">
         <div>
             <div class="sidebar-brand">
@@ -486,10 +483,8 @@
         </div>
     </div>
 
-    <!-- Main Content Area -->
     <div class="main-content">
         
-        <!-- Top Header with Profile Picture Upload -->
         <div class="top-header">
             <div>
                 <h1 id="welcomeText">Welcome back! 👋</h1>
@@ -507,7 +502,6 @@
             </div>
         </div>
 
-        <!-- HOME SECTION (Course Cards) -->
         <div id="home-section" class="content-section active-section">
             <div class="course-card" onclick="switchTab('course-1', null)">
                 <div class="course-info">
@@ -550,19 +544,17 @@
             </div>
         </div>
 
-        <!-- COURSE 1 DETAILS -->
         <div id="course-1" class="content-section">
             <a class="back-link" onclick="switchTab('home-section', document.getElementById('nav-home'))">‹ Back to Dashboard</a>
             <div class="course-detail-box">
                 <h2 style="font-size: 20px; font-weight: 800; margin-bottom: 5px;">HOW TO CREATE ADS</h2>
                 <p style="color: #6b7280; font-size: 14px;">Learn how to create effective advertisements.</p>
                 <div class="video-container-box">
-                    <iframe src="https://www.youtube.com/embed/blPkdcj0qfQ" allowfullscreen></iframe>
+                    <iframe src="https://www.youtube.com/embed/S6gN_ysT_Ro" allowfullscreen></iframe>
                 </div>
             </div>
         </div>
 
-        <!-- COURSE 2 DETAILS -->
         <div id="course-2" class="content-section">
             <a class="back-link" onclick="switchTab('home-section', document.getElementById('nav-home'))">‹ Back to Dashboard</a>
             <div class="course-detail-box">
@@ -574,7 +566,6 @@
             </div>
         </div>
 
-        <!-- COURSE 3 DETAILS -->
         <div id="course-3" class="content-section">
             <a class="back-link" onclick="switchTab('home-section', document.getElementById('nav-home'))">‹ Back to Dashboard</a>
             <div class="course-detail-box">
@@ -586,7 +577,6 @@
             </div>
         </div>
 
-        <!-- COURSE 4 DETAILS -->
         <div id="course-4" class="content-section">
             <a class="back-link" onclick="switchTab('home-section', document.getElementById('nav-home'))">‹ Back to Dashboard</a>
             <div class="course-detail-box">
@@ -598,7 +588,6 @@
             </div>
         </div>
 
-        <!-- COURSE 5 DETAILS -->
         <div id="course-5" class="content-section">
             <a class="back-link" onclick="switchTab('home-section', document.getElementById('nav-home'))">‹ Back to Dashboard</a>
             <div class="course-detail-box">
@@ -610,13 +599,11 @@
             </div>
         </div>
 
-        <!-- SETTINGS SECTION -->
         <div id="settings-section" class="content-section">
             <div class="settings-card">
                 <h3>Account Settings</h3>
                 <form id="settingsForm">
                     
-                    <!-- Account Details -->
                     <div class="settings-section-title">Account Details</div>
                     <div class="form-group">
                         <label>Full Name</label>
@@ -639,7 +626,6 @@
                         <input type="text" id="settingAddress" class="readonly-field" readonly>
                     </div>
 
-                    <!-- Change Password Section -->
                     <div class="settings-section-title">Change Password</div>
                     <div class="form-group">
                         <label>Current Password / PIN</label>
@@ -662,7 +648,6 @@
 
     </div>
 
-    <!-- AVATAR CROPPER MODAL -->
     <div id="avatarModal">
         <div class="modal-content">
             <h3>Crop Picture</h3>
