@@ -598,13 +598,13 @@
         const db = firebase.firestore();
 
         // --- AUTH CHECK & LOAD DATA ---
-        window.addEventListener('DOMContentLoaded', () => {
+        window.addEventListener('DOMContentLoaded', async () => {
             const fullName = localStorage.getItem('dc_user_fullname');
             const phone = localStorage.getItem('dc_user_phone');
             const email = localStorage.getItem('dc_user_email');
             const birthday = localStorage.getItem('dc_user_birthday');
             const address = localStorage.getItem('dc_user_address');
-            const avatar = localStorage.getItem('dc_user_avatar');
+            const userId = localStorage.getItem('dc_user_id');
 
             // Kung walang naka-login, ibalik sa index.html
             if (!fullName) {
@@ -623,8 +623,16 @@
             document.getElementById('settingPhone').value = phone || "N/A";
             document.getElementById('settingAddress').value = address || "N/A";
 
-            if (avatar) {
-                document.getElementById('profileAvatar').src = avatar;
+            // Kunin ang Avatar mula sa Firebase Firestore para laging updated kahit anong device
+            if (userId) {
+                try {
+                    const userDoc = await db.collection("users").doc(userId).get();
+                    if (userDoc.exists && userDoc.data().avatar) {
+                        document.getElementById('profileAvatar').src = userDoc.data().avatar;
+                    }
+                } catch (err) {
+                    console.error("Error loading avatar from Firebase:", err);
+                }
             }
         });
 
@@ -643,15 +651,27 @@
             }
         }
 
-        // --- AVATAR UPLOAD LOGIC ---
+        // --- AVATAR UPLOAD LOGIC (Naka-sync na sa Firebase) ---
         document.getElementById('avatarUpload').addEventListener('change', function(e) {
             const file = e.target.files[0];
+            const userId = localStorage.getItem('dc_user_id');
+
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(event) {
+                reader.onload = async function(event) {
                     const base64String = event.target.result;
                     document.getElementById('profileAvatar').src = base64String;
-                    localStorage.setItem('dc_user_avatar', base64String);
+                    
+                    // I-save diretso sa Firebase Firestore para mag-sync sa ibang device
+                    if (userId) {
+                        try {
+                            await db.collection("users").doc(userId).update({
+                                avatar: base64String
+                            });
+                        } catch (err) {
+                            console.error("Error saving avatar to Firebase:", err);
+                        }
+                    }
                 };
                 reader.readAsDataURL(file);
             }
