@@ -365,6 +365,86 @@
             border: none;
         }
 
+        /* --- AVATAR CROP / PREVIEW MODAL STYLES --- */
+        #avatarModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: #fff;
+            padding: 25px;
+            border-radius: 14px;
+            width: 350px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .modal-content h3 {
+            font-size: 16px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            color: #111418;
+        }
+
+        .preview-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin: 0 auto 15px auto;
+            border: 3px solid #e5be01;
+            background: #f3f4f6;
+        }
+
+        .preview-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-cancel {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .btn-cancel:hover {
+            background: #e5e7eb;
+        }
+
+        .btn-confirm {
+            background: #e5be01;
+            color: #111418;
+        }
+
+        .btn-confirm:hover {
+            background: #d4ae01;
+        }
+
         /* Mobile Responsive */
         @media (max-width: 768px) {
             .sidebar {
@@ -581,6 +661,21 @@
 
     </div>
 
+    <!-- AVATAR PREVIEW & SAVE MODAL -->
+    <div id="avatarModal">
+        <div class="modal-content">
+            <h3>I-preview ang Avatar</h3>
+            <div class="preview-circle">
+                <img id="modalPreviewImg" src="" alt="Preview">
+            </div>
+            <p style="font-size: 12px; color: #6b7280; margin-bottom: 10px;">Gusto mo bang gamitin ang litratong ito?</p>
+            <div class="modal-buttons">
+                <button type="button" class="modal-btn btn-cancel" onclick="closeAvatarModal()">Kanselahin</button>
+                <button type="button" class="modal-btn btn-confirm" onclick="confirmAvatarUpload()">I-save sa Firebase</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // --- FIREBASE CONFIGURATION ---
         const firebaseConfig = {
@@ -596,6 +691,8 @@
             firebase.initializeApp(firebaseConfig);
         }
         const db = firebase.firestore();
+
+        let pendingBase64Image = null;
 
         // --- AUTH CHECK & LOAD DATA ---
         window.addEventListener('DOMContentLoaded', async () => {
@@ -651,31 +748,48 @@
             }
         }
 
-        // --- AVATAR UPLOAD LOGIC (Naka-sync na sa Firebase) ---
+        // --- AVATAR SELECTION & MODAL PREVIEW ---
         document.getElementById('avatarUpload').addEventListener('change', function(e) {
             const file = e.target.files[0];
-            const userId = localStorage.getItem('dc_user_id');
-
             if (file) {
                 const reader = new FileReader();
-                reader.onload = async function(event) {
-                    const base64String = event.target.result;
-                    document.getElementById('profileAvatar').src = base64String;
-                    
-                    // I-save diretso sa Firebase Firestore para mag-sync sa ibang device
-                    if (userId) {
-                        try {
-                            await db.collection("users").doc(userId).update({
-                                avatar: base64String
-                            });
-                        } catch (err) {
-                            console.error("Error saving avatar to Firebase:", err);
-                        }
-                    }
+                reader.onload = function(event) {
+                    pendingBase64Image = event.target.result;
+                    document.getElementById('modalPreviewImg').src = pendingBase64Image;
+                    document.getElementById('avatarModal').style.display = 'flex'; // Ipakita ang Modal
                 };
                 reader.readAsDataURL(file);
             }
         });
+
+        function closeAvatarModal() {
+            document.getElementById('avatarModal').style.display = 'none';
+            pendingBase64Image = null;
+            document.getElementById('avatarUpload').value = ""; // I-reset ang input
+        }
+
+        async function confirmAvatarUpload() {
+            const userId = localStorage.getItem('dc_user_id');
+            if (pendingBase64Image) {
+                // I-update agad ang UI
+                document.getElementById('profileAvatar').src = pendingBase64Image;
+                document.getElementById('avatarModal').style.display = 'none';
+
+                // I-save sa Firebase Firestore
+                if (userId) {
+                    try {
+                        await db.collection("users").doc(userId).update({
+                            avatar: pendingBase64Image
+                        });
+                        console.log("Tagumpay na nai-save ang avatar sa Firebase!");
+                    } catch (err) {
+                        console.error("Error saving avatar to Firebase:", err);
+                    }
+                }
+                pendingBase64Image = null;
+                document.getElementById('avatarUpload').value = "";
+            }
+        }
 
         // --- SAVE SETTINGS LOGIC (Change Password with Current Password Check) ---
         document.getElementById('settingsForm').addEventListener('submit', async function(e) {
@@ -712,7 +826,7 @@
                 const docSnap = await userDocRef.get();
 
                 if (!docSnap.exists) {
-                    statusMsg.style.color = "red";
+                    statusMsg.style.color.color = "red";
                     statusMsg.textContent = "Hindi natagpuan ang account sa database.";
                     return;
                 }
